@@ -75,6 +75,8 @@ module.exports = {
 
     'quotes': ['warn', 'single'],
     'semi': ['warn', 'always'],
+    'indent': ['warn', 4],
+    'no-multiple-empty-lines': ["warn", { "max": 2, "maxEOF": 0 }],
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
