@@ -3,7 +3,13 @@
         <h1>{{ sampleText }}</h1>
         <div v-for="(row, y) in mapArray" :key="y">
             <div class="inline" v-for="(cell, x) in row" :key="x">
-                <div class="cell" :style="{background: '#'+cell.state}"> {{ cell.coordinate }}</div>
+                <div
+                    class="cell"
+                    :style="{background: '#'+cellColor(cell.state)}"
+                    @click="cell.state++"
+                >
+                    {{ cell.coordinate }}
+                </div>
             </div>
         </div>
     </div>
@@ -19,12 +25,23 @@ function generateMap () {
     for (let row = 0; row < 5; row++) {
         const rowArray = [];
         for (let column = 0; column < 5; column++) {
-            rowArray.push({ coordinate: `${row}, ${column}`, state: 'CA7070' });
+            rowArray.push({ coordinate: `${row}, ${column}`, state: 0 });
         }
         mapArray.value.push(rowArray);
     }
 }
 generateMap();
+function cellColor (state) {
+    switch (state) {
+    case 0:
+        return 'E0E76D';
+    case 1:
+        return 'CA7070';
+    case 2:
+        return '6DA1E7';
+    }
+    return '344152';
+}
 
 </script>
 
