@@ -1,13 +1,13 @@
 <template>
     <div>
-        <h1>{{ textExample }}</h1>
+        <h1>{{ sampleText }}</h1>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-const textExample = ref('Battleship draft game');
+const sampleText = ref('Battleship draft game');
 
 </script>
 
