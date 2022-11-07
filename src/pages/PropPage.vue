@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h1>Hi, this is prop page.</h1>
+        <h1>Hi, this is Battleship.</h1>
     </div>
 </template>
