@@ -60,6 +60,13 @@ function shipPlacement (shipLength) {
 
     mapArray.value[R][C].state = 1;
     console.log(randomCell);
+
+    // there is no need to go through all the variation below if it's a single cell ship
+    if (shipLength === 1) {
+        console.log('ship is tiny!');
+        // doPlacement()
+    }
+
     console.log(direction);
 }
 
