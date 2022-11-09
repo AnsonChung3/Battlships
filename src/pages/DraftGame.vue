@@ -31,6 +31,21 @@ function generateMap () {
     }
 }
 generateMap();
+
+function getRandom (max) {
+    return Math.floor(Math.random() * max);
+}
+
+function shipPlacement () {
+    const R = getRandom(5);
+    const C = getRandom(5);
+    const randomCell = mapArray.value[R][C];
+    mapArray.value[R][C].state = 1;
+    console.log(randomCell);
+}
+
+shipPlacement();
+
 // function cellColor is to change background color of cells when state changes
 function cellColor (state) {
     switch (state) {
