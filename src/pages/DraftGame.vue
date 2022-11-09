@@ -20,6 +20,8 @@ import { ref } from 'vue';
 
 const sampleText = ref('Battleship draft game');
 const sampleGridWidth = 5;
+// shipLength is hard coded here for development
+const testLength = 4;
 
 const mapArray = ref([]);
 function generateMap () {
@@ -37,15 +39,28 @@ function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
 
-function shipPlacement () {
-    const R = getRandom(sampleGridWidth);
-    const C = getRandom(sampleGridWidth);
-    const randomCell = mapArray.value[R][C];
+function shipPlacement (shipLength) {
+    let R = getRandom(sampleGridWidth);
+    let C = getRandom(sampleGridWidth);
+    let randomCell = mapArray.value[R][C];
+
+    // while statement to make sure enough space for ship to be placed
+    // left to right or top to bottom
+    while (
+        randomCell.state !== 0 ||
+        R > sampleGridWidth - shipLength ||
+        C > sampleGridWidth - shipLength
+    ) {
+        R = getRandom(sampleGridWidth);
+        C = getRandom(sampleGridWidth);
+        randomCell = mapArray.value[R][C];
+    }
+
     mapArray.value[R][C].state = 1;
     console.log(randomCell);
 }
 
-shipPlacement();
+shipPlacement(testLength);
 
 // function cellColor is to change background color of cells when state changes
 function cellColor (state) {
