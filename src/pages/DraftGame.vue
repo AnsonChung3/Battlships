@@ -19,8 +19,8 @@
 import { ref } from 'vue';
 
 const sampleText = ref('Battleship draft game');
+// const gridWidth = 10;
 const sampleGridWidth = 5;
-// shipLength is hard coded here for development
 const testLength = 3;
 const maxStartDimension = sampleGridWidth - testLength;
 
@@ -40,20 +40,22 @@ function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
 
-function doPlacement (startR, startC, shipLength, direction) {
-    console.log(`start placement, originating from cell [${startR}, ${startC}]`);
+function doPlacement (R, C, shipLength, direction) {
+    // in reality, no cell should be painted until this part
+    // so the starting cell is painted here
     for (let i = 0; i < shipLength; i++) {
         if (direction === 'Right') {
-            console.log(`placement for cell [${startR}, ${startC + i}]`);
-            mapArray.value[startR][startC + i].state = 1;
+            mapArray.value[R][C + i].state = 1;
+            // there should be another part of the painting
+            // to put down the one space around the ship
         } else {
-            console.log(`placement for cell [${startR + i}, ${startC}]`);
-            mapArray.value[startR + i][startC].state = 1;
+            mapArray.value[R + i][C].state = 1;
         }
     }
 }
 
 function shipPlacement (shipLength) {
+    // const maxStartDimention = gridWidth - shipLength;
     let R = getRandom(sampleGridWidth);
     let C = getRandom(sampleGridWidth);
     let randomCell = mapArray.value[R][C];
