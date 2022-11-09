@@ -1,6 +1,10 @@
 <template>
     <div>
         <h1>{{ sampleText }}</h1>
+        <q-btn
+            @click="shipPlacement"
+            label="ship placement"
+        />
         <div v-for="(row, R) in mapArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
