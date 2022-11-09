@@ -48,7 +48,7 @@ function shipPlacement (shipLength) {
     let R = getRandom(sampleGridWidth);
     let C = getRandom(sampleGridWidth);
     let randomCell = mapArray.value[R][C];
-    const direction = Math.random() < 0.5 ? "Right" : "Down"
+    const direction = Math.random() < 0.5 ? 'Right' : 'Down'
 
     // while statement to make sure enough space for ship to be placed
     // left to right or top to bottom
