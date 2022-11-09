@@ -19,12 +19,13 @@
 import { ref } from 'vue';
 
 const sampleText = ref('Battleship draft game');
+const sampleGridWidth = 5;
 
 const mapArray = ref([]);
 function generateMap () {
-    for (let R = 0; R < 5; R++) {
+    for (let R = 0; R < sampleGridWidth; R++) {
         const rowArray = [];
-        for (let C = 0; C < 5; C++) {
+        for (let C = 0; C < sampleGridWidth; C++) {
             rowArray.push({ coordinate: `row ${R}, column ${C}`, state: 0 });
         }
         mapArray.value.push(rowArray);
@@ -37,8 +38,8 @@ function getRandom (max) {
 }
 
 function shipPlacement () {
-    const R = getRandom(5);
-    const C = getRandom(5);
+    const R = getRandom(sampleGridWidth);
+    const C = getRandom(sampleGridWidth);
     const randomCell = mapArray.value[R][C];
     mapArray.value[R][C].state = 1;
     console.log(randomCell);
