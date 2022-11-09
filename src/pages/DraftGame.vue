@@ -26,6 +26,7 @@ const sampleText = ref('Battleship draft game');
 const sampleGridWidth = 5;
 // shipLength is hard coded here for development
 const testLength = 4;
+const maxStartDimension = sampleGridWidth - testLength;
 
 const mapArray = ref([]);
 function generateMap () {
