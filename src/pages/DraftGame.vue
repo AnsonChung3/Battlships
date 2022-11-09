@@ -50,11 +50,7 @@ function shipPlacement (shipLength) {
 
     // while statement to make sure enough space for ship to be placed
     // left to right or top to bottom
-    while (
-        randomCell.state !== 0 ||
-        R > sampleGridWidth - shipLength ||
-        C > sampleGridWidth - shipLength
-    ) {
+    while (randomCell.state !== 0 || R > maxStartDimension || C > maxStartDimension) {
         R = getRandom(sampleGridWidth);
         C = getRandom(sampleGridWidth);
         randomCell = mapArray.value[R][C];
