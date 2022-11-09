@@ -31,6 +31,7 @@ function generateMap () {
     }
 }
 generateMap();
+// function cellColor is to change background color of cells when state changes
 function cellColor (state) {
     switch (state) {
     case 0:
