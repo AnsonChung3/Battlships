@@ -1,14 +1,14 @@
 <template>
     <div>
         <h1>{{ sampleText }}</h1>
-        <div v-for="(row, y) in mapArray" :key="y">
-            <div class="inline" v-for="(cell, x) in row" :key="x">
+        <div v-for="(row, R) in mapArray" :key="R">
+            <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
                     class="cell"
                     :style="{background: '#'+cellColor(cell.state)}"
                     @click="cell.state++"
                 >
-                    {{ cell.coordinate }}
+                    {{ [R, C] }}
                 </div>
             </div>
         </div>
@@ -22,10 +22,10 @@ const sampleText = ref('Battleship draft game');
 
 const mapArray = ref([]);
 function generateMap () {
-    for (let row = 0; row < 5; row++) {
+    for (let R = 0; R < 5; R++) {
         const rowArray = [];
-        for (let column = 0; column < 5; column++) {
-            rowArray.push({ coordinate: `${row}, ${column}`, state: 0 });
+        for (let C = 0; C < 5; C++) {
+            rowArray.push({ coordinate: `row ${R}, column ${C}`, state: 0 });
         }
         mapArray.value.push(rowArray);
     }
