@@ -1,10 +1,6 @@
 <template>
     <div>
         <h1>{{ sampleText }}</h1>
-        <q-btn
-            @click="shipPlacement"
-            label="ship placement"
-        />
         <div v-for="(row, R) in mapArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
@@ -25,7 +21,7 @@ import { ref } from 'vue';
 const sampleText = ref('Battleship draft game');
 const sampleGridWidth = 5;
 // shipLength is hard coded here for development
-const testLength = 4;
+const testLength = 3;
 const maxStartDimension = sampleGridWidth - testLength;
 
 const mapArray = ref([]);
@@ -44,11 +40,23 @@ function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
 
+function doPlacement (startR, startC, shipLength, direction) {
+    console.log(`start placement, originating from cell [${startR}, ${startC}]`);
+    for (let i = 0; i < shipLength; i++) {
+        if (direction === 'Right') {
+            console.log(`placement for cell [${startR}, ${startC + i}]`);
+            mapArray.value[startR][startC + i].state = 1;
+        } else {
+            console.log(`placement for cell [${startR + i}, ${startC}]`);
+            mapArray.value[startR + i][startC].state = 1;
+        }
+    }
+}
+
 function shipPlacement (shipLength) {
     let R = getRandom(sampleGridWidth);
     let C = getRandom(sampleGridWidth);
     let randomCell = mapArray.value[R][C];
-    const direction = Math.random() < 0.5 ? 'Right' : 'Down'
 
     // while statement to make sure enough space for ship to be placed
     // left to right or top to bottom
@@ -58,16 +66,34 @@ function shipPlacement (shipLength) {
         randomCell = mapArray.value[R][C];
     }
 
+    // this is display for development
+    console.log(`starting coordinate be: ${mapArray.value[R][C].coordinate}`);
     mapArray.value[R][C].state = 1;
-    console.log(randomCell);
 
-    // there is no need to go through all the variation below if it's a single cell ship
-    if (shipLength === 1) {
-        console.log('ship is tiny!');
-        // doPlacement()
+    // no extra variation needed if it's a single cell ship
+    // if (shipLength === 1) {
+    //     doPlacement(shipLength);
+    // }
+
+    const direction = Math.random() < 0.5 ? 'Right' : 'Down';
+    console.log(`ship is going ${direction}`);
+    const placementArray = [];
+    for (let len = 1; len < shipLength; len++) {
+        if (direction === 'Right') {
+            const cell = mapArray.value[R][C + len];
+            placementArray.push(cell.state);
+        } else {
+            const cell = mapArray.value[R + len][C];
+            placementArray.push(cell.state);
+        }
     }
-
-    console.log(direction);
+    // console.log(placementArray);
+    if (placementArray.every((cellState) => cellState === 0)) {
+        console.log('all blocks are available');
+        doPlacement(R, C, shipLength, direction);
+    } else {
+        console.log('some cell is blocked, need to figure out how to start over');
+    }
 }
 
 shipPlacement(testLength);
