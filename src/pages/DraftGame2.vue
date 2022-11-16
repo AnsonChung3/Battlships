@@ -43,7 +43,7 @@ function getRandom (max) {
 // first get a random start point
 // reutrning an object e.g. {R: 1, C: 1}
 let failedStarts = [];
-function getRndStart(shipLength) {
+function getRndStart (shipLength) {
     const maxStartArea = gridWidth - shipLength;
     let R = getRandom(gridWidth);
     let C = getRandom(gridWidth);
@@ -59,28 +59,28 @@ function getRndStart(shipLength) {
         C = getRandom(gridWidth);
         randomCell = mapArray.value[R][C];
     }
-    return {R, C};
+    return { R, C };
 }
 
-function placeRightSuccess(coordinate, shipLength) {
+function placeRightSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const cell = mapArray.value[coordinate.R][coordinate.C + len];
         if (cell.state !== 0) {
-            return false
+            return false;
         }
     }
-    return true
+    return true;
 }
-function placeDownSuccess(coordinate, shipLength) {
+function placeDownSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const cell = mapArray.value[coordinate.R + len][coordinate.C];
         if (cell.state !== 0) {
-            return false
+            return false;
         }
     }
-    return true
+    return true;
 }
-function directionRight() {
+function directionRight () {
     // this return a boolean value for ship placement direction
     return (Math.random() < 0.5);
 }
@@ -96,7 +96,7 @@ function doPlacement (coordinate, shipLength, goRight) {
     }
 }
 
-function shipPlacement(shipLength) {
+function shipPlacement (shipLength) {
     let startCell = getRndStart(shipLength);
     // e.g. startCell = {R: 1, C: 2}
     let right = placeRightSuccess(startCell, shipLength);
@@ -111,7 +111,7 @@ function shipPlacement(shipLength) {
         right = placeRightSuccess(startCell);
         down = placeDownSuccess(startCell);
     }
-    let goRight = undefined;
+    let goRight = true;
     if (right && down) {
         goRight = directionRight();
     } else if (right) {
@@ -119,7 +119,7 @@ function shipPlacement(shipLength) {
     } else {
         goRight = false;
     }
-    doPlacement(startCell, shipLength, goRight)
+    doPlacement(startCell, shipLength, goRight);
 }
 
 </script>
