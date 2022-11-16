@@ -24,6 +24,7 @@ const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
 const gridWidth = 10;
 const mapArray = ref([]);
 function generateMap () {
+    console.log('start generate map');
     for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
         for (let C = 0; C < gridWidth; C++) {
@@ -31,34 +32,31 @@ function generateMap () {
         }
         mapArray.value.push(rowArray);
     }
+    console.log('finish generate map');
 }
 generateMap();
 
-// this blcok is to try to place a single 3 cell ship
-const testLength = 3;
-const maxStartDimension = sampleGridWidth - testLength;
 function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
 // first get a random start point
 // reutrning an object e.g. {R: 1, C: 1}
-let failedStarts = [];
 function getRndStart (shipLength) {
+    console.log('get random starting coordinate');
     const maxStartArea = gridWidth - shipLength;
     let R = getRandom(gridWidth);
     let C = getRandom(gridWidth);
     let randomCell = mapArray.value[R][C];
-    // due to how JS do comparison and reference issue,
-    // this needs to be convert to to compare
-    let provedFailed = failedStarts.some((cell) => JSON.stringify(cell) === JSON.stringify({R, C}));
 
     // while statement to make sure ship wouldn't be off the grid
     // left to right or top to bottom
-    while (randomCell.state !== 0 || R > maxStartDimension || C > maxStartDimension || provedFailed) {
+    while (randomCell.state !== 0 || (R > maxStartArea && C > maxStartArea)) {
+        console.log(`coordinate sits in nono zone, coordinate being row ${R}, col ${C}`);
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
         randomCell = mapArray.value[R][C];
     }
+    console.log(`right, let's start at row ${R}, col ${C}`);
     return { R, C };
 }
 
@@ -85,6 +83,7 @@ function directionRight () {
     return (Math.random() < 0.5);
 }
 function doPlacement (coordinate, shipLength, goRight) {
+    console.log('do placement');
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
             mapArray.value[coordinate.R][coordinate.C + i].state = 1;
@@ -103,14 +102,15 @@ function shipPlacement (shipLength) {
     let down = placeDownSuccess(startCell, shipLength);
     // right and left are boolean values
     while (!right && !down) {
+        console.log(`too bad, it doesn't fit`);
         // if both right and down placements have failed
         // this start cell should be added to an array to keep track of failed ones
         // and then restart the whole process
-        failedStarts.push(startCell);
         startCell = getRndStart;
         right = placeRightSuccess(startCell);
         down = placeDownSuccess(startCell);
     }
+    console.log(`coordinate row ${startCell.R} col ${startCell.C}, right is ${right}, down is ${down}`);
     let goRight = true;
     if (right && down) {
         goRight = directionRight();
