@@ -73,7 +73,7 @@ module.exports = {
     
     'prefer-promise-reject-errors': 'off',
 
-    'quotes': ['warn', 'single'],
+    'quotes': ['warn', 'single', { 'allowTemplateLiterals': true }],
     'semi': ['warn', 'always'],
     'indent': ['warn', 4],
     'no-multiple-empty-lines': ["warn", { "max": 2, "maxEOF": 0 }],
