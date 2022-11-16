@@ -67,7 +67,7 @@ function getRndStart (shipLength) {
 function placeRightSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const col = coordinate.C + len;
-        if (col > gridWidth - 1) {
+        if (col >= gridWidth) {
             return false;
         }
         const cell = gridArray.value[coordinate.R][col];
@@ -80,7 +80,7 @@ function placeRightSuccess (coordinate, shipLength) {
 function placeDownSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const row = coordinate.R + len;
-        if (row > gridWidth - 1) {
+        if (row >= gridWidth) {
             return false;
         }
         const cell = gridArray.value[row][coordinate.C];
@@ -100,42 +100,86 @@ function doPlacement (coordinate, shipLength, goRight) {
     const C = coordinate.C;
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
+            console.log('go right');
+            // color the ship itself
             gridArray.value[R][C + i].state = 1;
-            // need to figure out hot to put down spaces aroudn the ship
+            // color all 6 blocks on both ends of the ship, if exist
+            if (i === 0) {
+                // left col
+                if (C >= 1) {
+                    // left end
+                    gridArray.value[R][C - 1].state = 2;
+                    // left top
+                    if (R >= 1) {
+                        gridArray.value[R - 1][C - 1].state = 2;
+                    }
+                    // left bttom
+                    if (R + 1 < gridWidth) {
+                        gridArray.value[R + 1][C - 1].state = 2;
+                    }
+                }
+                // right col
+                if (C + shipLength < gridWidth) {
+                    // right end
+                    gridArray.value[R][C + shipLength].state = 2;
+                    // right top
+                    if (R >= 1) {
+                        gridArray.value[R - 1][C + shipLength].state = 2;
+                    }
+                    // right bottom
+                    if (R + 1 < gridWidth) {
+                        gridArray.value[R + 1][C + shipLength].state = 2;
+                    }
+                }
+            }
             // if the row above exist
-            if (gridArray.value[R - 1]) {
+            if (R >= 1) {
+                // color the block above the ship
                 gridArray.value[R - 1][C + i].state = 2;
-                // if top left corner exist
-                if (gridArray.value[R - 1][C - 1]) {
-                    gridArray.value[R - 1][C - 1].state = 2;
-                    // and we are at the left most block of the ship
-                    if (i === 0) {
-                        gridArray.value[R][C - 1].state = 2;
-                    }
-                }
-                // if top right corner exist
-                if (gridArray.value[R - 1][C + shipLength]) {
-                    gridArray.value[R - 1][C + shipLength].state = 2;
-                    // and we are at the right most block of the shhip
-                    if (i === shipLength - 1) {
-                        gridArray.value[R][C + shipLength].state = 2;
-                    }
-                }
             }
             // if bottom row exist
-            if (gridArray.value[R + 1]) {
+            if (R + 1 < gridWidth) {
                 gridArray.value[R + 1][C + i].state = 2;
-                // if bottom left corner exist
-                if (gridArray.value[R + 1][C - 1] && i === 0) {
-                    gridArray.value[R + 1][C - 1].state = 2;
-                }
-                // if bottom right corner exist
-                if (gridArray.value[R + 1][C + shipLength] && i === shipLength - 1) {
-                    gridArray.value[R + 1][C + shipLength].state = 2;
-                }
             }
         } else {
+            console.log('go down');
+            // color the ship itself
             gridArray.value[R + i][C].state = 1;
+            // color all 6 blocks on both ends of the ship, if exist
+            if (i === 0) {
+                // if top row exist
+                if (R >= 1) {
+                    gridArray.value[R - 1][C].state = 2;
+                    // top left
+                    if (C >= 1) {
+                        gridArray.value[R - 1][C - 1].state = 2;
+                    }
+                    // top right
+                    if (C + 1 < gridWidth) {
+                        gridArray.value[R - 1][C + 1].state = 2;
+                    }
+                }
+                // if bottom row exist
+                if (R + shipLength < gridWidth) {
+                    gridArray.value[R + shipLength][C].state = 2;
+                    // bottom left
+                    if (C >= 1) {
+                        gridArray.value[R + shipLength][C - 1].state = 2;
+                    }
+                    // bottom right
+                    if (C + 1 < gridWidth) {
+                        gridArray.value[R + shipLength][C + 1].state = 2;
+                    }
+                }
+            }
+            // left col
+            if (C >= 1) {
+                gridArray.value[R + i][C - 1].state = 2;
+            }
+            // right col
+            if (C + 1 < gridWidth) {
+                gridArray.value[R + i][C + 1].state = 2;
+            }
         }
     }
 }
