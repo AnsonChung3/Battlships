@@ -5,7 +5,7 @@
         <q-btn @click="shipPlacement(3)" label="3" color="primary"/>
         <q-btn @click="shipPlacement(2)" label="2" color="primary"/>
         <q-btn @click="shipPlacement(1)" label="1" color="primary"/>
-        <div v-for="(row, R) in mapArray" :key="R">
+        <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
                     class="cell"
@@ -26,7 +26,7 @@ const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
 
 // this blcok is to generate the base grid
 const gridWidth = 10;
-const mapArray = ref([]);
+const gridArray = ref([]);
 function generateMap () {
     console.log('start generate map');
     for (let R = 0; R < gridWidth; R++) {
@@ -34,7 +34,7 @@ function generateMap () {
         for (let C = 0; C < gridWidth; C++) {
             rowArray.push({ coordinate: `row ${R}, column ${C}`, state: 0 });
         }
-        mapArray.value.push(rowArray);
+        gridArray.value.push(rowArray);
     }
     console.log('finish generate map');
 }
@@ -50,7 +50,7 @@ function getRndStart (shipLength) {
     const maxStartArea = gridWidth - shipLength;
     let R = getRandom(gridWidth);
     let C = getRandom(gridWidth);
-    let randomCell = mapArray.value[R][C];
+    let randomCell = gridArray.value[R][C];
 
     // while statement to make sure ship wouldn't be off the grid
     // left to right or top to bottom
@@ -58,7 +58,7 @@ function getRndStart (shipLength) {
         console.log(`coordinate sits in nono zone, coordinate being row ${R}, col ${C}`);
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
-        randomCell = mapArray.value[R][C];
+        randomCell = gridArray.value[R][C];
     }
     console.log(`right, let's start at row ${R}, col ${C}`);
     return { R, C };
@@ -70,7 +70,7 @@ function placeRightSuccess (coordinate, shipLength) {
         if (col > gridWidth - 1) {
             return false;
         }
-        const cell = mapArray.value[coordinate.R][col];
+        const cell = gridArray.value[coordinate.R][col];
         if (cell.state !== 0) {
             return false;
         }
@@ -83,7 +83,7 @@ function placeDownSuccess (coordinate, shipLength) {
         if (row > gridWidth - 1) {
             return false;
         }
-        const cell = mapArray.value[row][coordinate.C];
+        const cell = gridArray.value[row][coordinate.C];
         if (cell.state !== 0) {
             return false;
         }
@@ -100,42 +100,42 @@ function doPlacement (coordinate, shipLength, goRight) {
     const C = coordinate.C;
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
-            mapArray.value[R][C + i].state = 1;
+            gridArray.value[R][C + i].state = 1;
             // need to figure out hot to put down spaces aroudn the ship
             // if the row above exist
-            if (mapArray.value[R - 1]) {
-                mapArray.value[R - 1][C + i].state = 2;
+            if (gridArray.value[R - 1]) {
+                gridArray.value[R - 1][C + i].state = 2;
                 // if top left corner exist
-                if (mapArray.value[R - 1][C - 1]) {
-                    mapArray.value[R - 1][C - 1].state = 2;
+                if (gridArray.value[R - 1][C - 1]) {
+                    gridArray.value[R - 1][C - 1].state = 2;
                     // and we are at the left most block of the ship
                     if (i === 0) {
-                        mapArray.value[R][C - 1].state = 2;
+                        gridArray.value[R][C - 1].state = 2;
                     }
                 }
                 // if top right corner exist
-                if (mapArray.value[R - 1][C + shipLength]) {
-                    mapArray.value[R - 1][C + shipLength].state = 2;
+                if (gridArray.value[R - 1][C + shipLength]) {
+                    gridArray.value[R - 1][C + shipLength].state = 2;
                     // and we are at the right most block of the shhip
                     if (i === shipLength - 1) {
-                        mapArray.value[R][C + shipLength].state = 2;
+                        gridArray.value[R][C + shipLength].state = 2;
                     }
                 }
             }
             // if bottom row exist
-            if (mapArray.value[R + 1]) {
-                mapArray.value[R + 1][C + i].state = 2;
+            if (gridArray.value[R + 1]) {
+                gridArray.value[R + 1][C + i].state = 2;
                 // if bottom left corner exist
-                if (mapArray.value[R + 1][C - 1] && i === 0) {
-                    mapArray.value[R + 1][C - 1].state = 2;
+                if (gridArray.value[R + 1][C - 1] && i === 0) {
+                    gridArray.value[R + 1][C - 1].state = 2;
                 }
                 // if bottom right corner exist
-                if (mapArray.value[R + 1][C + shipLength] && i === shipLength - 1) {
-                    mapArray.value[R + 1][C + shipLength].state = 2;
+                if (gridArray.value[R + 1][C + shipLength] && i === shipLength - 1) {
+                    gridArray.value[R + 1][C + shipLength].state = 2;
                 }
             }
         } else {
-            mapArray.value[R + i][C].state = 1;
+            gridArray.value[R + i][C].state = 1;
         }
     }
 }
