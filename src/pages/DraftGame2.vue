@@ -151,9 +151,9 @@ function shipPlacement (shipLength) {
         // if both right and down placements have failed
         // this start cell should be added to an array to keep track of failed ones
         // and then restart the whole process
-        startCell = getRndStart;
-        right = placeRightSuccess(startCell);
-        down = placeDownSuccess(startCell);
+        startCell = getRndStart(shipLength);
+        right = placeRightSuccess(startCell, shipLength);
+        down = placeDownSuccess(startCell, shipLength);
     }
     console.log(`coordinate row ${startCell.R} col ${startCell.C}, right is ${right}, down is ${down}`);
     let goRight = true;
