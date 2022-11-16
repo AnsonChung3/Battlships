@@ -62,7 +62,11 @@ function getRndStart (shipLength) {
 
 function placeRightSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
-        const cell = mapArray.value[coordinate.R][coordinate.C + len];
+        const col = coordinate.C + len;
+        if (col > gridWidth - 1) {
+            return false;
+        }
+        const cell = mapArray.value[coordinate.R][col];
         if (cell.state !== 0) {
             return false;
         }
@@ -71,7 +75,11 @@ function placeRightSuccess (coordinate, shipLength) {
 }
 function placeDownSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
-        const cell = mapArray.value[coordinate.R + len][coordinate.C];
+        const row = coordinate.R + len;
+        if (row > gridWidth - 1) {
+            return false;
+        }
+        const cell = mapArray.value[row][coordinate.C];
         if (cell.state !== 0) {
             return false;
         }
