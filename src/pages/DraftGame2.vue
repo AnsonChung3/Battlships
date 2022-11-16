@@ -84,13 +84,46 @@ function directionRight () {
 }
 function doPlacement (coordinate, shipLength, goRight) {
     console.log('do placement');
+    const R = coordinate.R;
+    const C = coordinate.C;
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
-            mapArray.value[coordinate.R][coordinate.C + i].state = 1;
-            // there should be another part of the painting
-            // to put down the one space around the ship
+            mapArray.value[R][C + i].state = 1;
+            // need to figure out hot to put down spaces aroudn the ship
+            // if the row above exist
+            if (mapArray.value[R - 1]) {
+                mapArray.value[R - 1][C + i].state = 2;
+                // if top left corner exist
+                if (mapArray.value[R - 1][C - 1]) {
+                    mapArray.value[R - 1][C - 1].state = 2;
+                    // and we are at the left most block of the ship
+                    if (i === 0) {
+                        mapArray.value[R][C - 1].state = 2;
+                    }
+                }
+                // if top right corner exist
+                if (mapArray.value[R - 1][C + shipLength]) {
+                    mapArray.value[R - 1][C + shipLength].state = 2;
+                    // and we are at the right most block of the shhip
+                    if (i === shipLength - 1) {
+                        mapArray.value[R][C + shipLength].state = 2;
+                    }
+                }
+            }
+            // if bottom row exist
+            if (mapArray.value[R + 1]) {
+                mapArray.value[R + 1][C + i].state = 2;
+                // if bottom left corner exist
+                if (mapArray.value[R + 1][C - 1] && i === 0) {
+                    mapArray.value[R + 1][C - 1].state = 2;
+                }
+                // if bottom right corner exist
+                if (mapArray.value[R + 1][C + shipLength] && i === shipLength - 1) {
+                    mapArray.value[R + 1][C + shipLength].state = 2;
+                }
+            }
         } else {
-            mapArray.value[coordinate.R + i][coordinate.C].state = 1;
+            mapArray.value[R + i][C].state = 1;
         }
     }
 }
