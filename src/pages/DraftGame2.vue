@@ -121,6 +121,21 @@ function shipPlacement (shipLength) {
     }
     doPlacement(startCell, shipLength, goRight);
 }
+// function cellColor is to change background color of cells when state changes
+function cellColor (state) {
+    switch (state) {
+    case 0:
+        // cell is blank
+        return 'E0E76D';
+    case 1:
+        // ship is here
+        return 'CA7070';
+    case 2:
+        // empty space between ships, cannot be used
+        return '6DA1E7';
+    }
+    return '344152';
+}
 
 </script>
 
