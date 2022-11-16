@@ -21,12 +21,12 @@ import { ref } from 'vue';
 const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
 
 // this blcok is to generate the base grid
-const sampleGridWidth = 5;
+const gridWidth = 10;
 const mapArray = ref([]);
 function generateMap () {
-    for (let R = 0; R < sampleGridWidth; R++) {
+    for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
-        for (let C = 0; C < sampleGridWidth; C++) {
+        for (let C = 0; C < gridWidth; C++) {
             rowArray.push({ coordinate: `row ${R}, column ${C}`, state: 0 });
         }
         mapArray.value.push(rowArray);
@@ -44,9 +44,9 @@ function getRandom (max) {
 // reutrning an object e.g. {R: 1, C: 1}
 let failedStarts = [];
 function getRndStart(shipLength) {
-    const maxStartDimension = sampleGridWidth - shipLength;
-    let R = getRandom(sampleGridWidth);
-    let C = getRandom(sampleGridWidth);
+    const maxStartArea = gridWidth - shipLength;
+    let R = getRandom(gridWidth);
+    let C = getRandom(gridWidth);
     let randomCell = mapArray.value[R][C];
     // due to how JS do comparison and reference issue,
     // this needs to be convert to to compare
@@ -55,8 +55,8 @@ function getRndStart(shipLength) {
     // while statement to make sure ship wouldn't be off the grid
     // left to right or top to bottom
     while (randomCell.state !== 0 || R > maxStartDimension || C > maxStartDimension || provedFailed) {
-        R = getRandom(sampleGridWidth);
-        C = getRandom(sampleGridWidth);
+        R = getRandom(gridWidth);
+        C = getRandom(gridWidth);
         randomCell = mapArray.value[R][C];
     }
     return {R, C};
