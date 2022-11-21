@@ -24,11 +24,10 @@ import { ref } from 'vue';
 
 const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
 
-// this blcok is to generate the base grid
+// this blcok is to generate an empty grid
 const gridWidth = 10;
 const gridArray = ref([]);
 function generateMap () {
-    console.log('start generate map');
     for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
         for (let C = 0; C < gridWidth; C++) {
@@ -36,14 +35,13 @@ function generateMap () {
         }
         gridArray.value.push(rowArray);
     }
-    console.log('finish generate map');
 }
 generateMap();
 
+// first get a random start point
 function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
-// first get a random start point
 // reutrning an object e.g. {R: 1, C: 1}
 function getRndStart (shipLength) {
     console.log('get random starting coordinate');
@@ -52,15 +50,15 @@ function getRndStart (shipLength) {
     let C = getRandom(gridWidth);
     let randomCell = gridArray.value[R][C];
 
-    // while statement to make sure ship wouldn't be off the grid
-    // left to right or top to bottom
+    // while (cell is unavailable OR not enough space for neither placement direction) is true
+    // {get a new random start}
     while (randomCell.state !== 0 || (R > maxStartArea && C > maxStartArea)) {
-        console.log(`coordinate sits in nono zone, coordinate being row ${R}, col ${C}`);
+        console.log(`random start sits in nono zone, coordinate being row ${R}, col ${C}`);
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
         randomCell = gridArray.value[R][C];
     }
-    console.log(`right, let's start at row ${R}, col ${C}`);
+    console.log(`passing row ${R}, col ${C} to check placement`);
     return { R, C };
 }
 
@@ -95,7 +93,7 @@ function directionRight () {
     return (Math.random() < 0.5);
 }
 function doPlacement (coordinate, shipLength, goRight) {
-    console.log('do placement');
+    console.log(`do placement for ${coordinate}`);
     const R = coordinate.R;
     const C = coordinate.C;
     for (let i = 0; i < shipLength; i++) {
@@ -190,16 +188,15 @@ function shipPlacement (shipLength) {
     let right = placeRightSuccess(startCell, shipLength);
     let down = placeDownSuccess(startCell, shipLength);
     // right and left are boolean values
+    // while (the start cell is available, but it is blocked in both direction) is ture
+    // {get a new random start and check if any direction is viable}
     while (!right && !down) {
         console.log(`too bad, it doesn't fit`);
-        // if both right and down placements have failed
-        // this start cell should be added to an array to keep track of failed ones
-        // and then restart the whole process
         startCell = getRndStart(shipLength);
         right = placeRightSuccess(startCell, shipLength);
         down = placeDownSuccess(startCell, shipLength);
     }
-    console.log(`coordinate row ${startCell.R} col ${startCell.C}, right is ${right}, down is ${down}`);
+    console.log(`row ${startCell.R} col ${startCell.C} is viable start, right is ${right}, down is ${down}`);
     let goRight = true;
     if (right && down) {
         goRight = directionRight();
@@ -210,7 +207,7 @@ function shipPlacement (shipLength) {
     }
     doPlacement(startCell, shipLength, goRight);
 }
-// function cellColor is to change background color of cells when state changes
+// dynamic background color for cells
 function cellColor (state) {
     switch (state) {
     case 0:
