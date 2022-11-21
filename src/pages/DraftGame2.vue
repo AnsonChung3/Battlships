@@ -1,5 +1,14 @@
 <template>
     <div>
+        <h1>yup, can pass variables(?) into methods here to call directly</h1>
+        <div v-for="(text, i) in smapleArray" :key="i">
+            <q-btn
+                @click="samplePrint(text)"
+                :label=text
+                color="primary"
+                text-color="secondary"
+            />
+        </div>
         <h1>{{ sampleText }}</h1>
         <div>
             <q-btn
@@ -42,6 +51,10 @@
 import { ref } from 'vue';
 
 const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
+const smapleArray = ref(['hey', 'beep']);
+function samplePrint (argu) {
+    console.log(argu);
+}
 
 // this blcok is to generate an empty grid
 const gridWidth = 10;
