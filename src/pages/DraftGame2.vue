@@ -1,10 +1,29 @@
 <template>
     <div>
         <h1>{{ sampleText }}</h1>
-        <q-btn @click="shipPlacement(5)" label="5" color="primary"/>
-        <q-btn @click="shipPlacement(3)" label="3" color="primary"/>
-        <q-btn @click="shipPlacement(2)" label="2" color="primary"/>
-        <q-btn @click="shipPlacement(1)" label="1" color="primary"/>
+        <div>
+            <q-btn
+                @click="clearMap"
+                label="new map"
+                color="primary"
+                text-color="secondary"
+            />
+            <q-btn
+                @click="autoMap"
+                label="auto full map"
+                color="primary"
+                text-color="secondary"
+            />
+        </div>
+        <div>
+            <q-btn
+                v-for="(len, i) in shipLengthArray" :key="i"
+                @click="shipPlacement(len)"
+                :label=len
+                color="primary"
+                text-color="secondary"
+            />
+        </div>
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
@@ -27,6 +46,7 @@ const sampleText = ref(`let's try to break the shipPlacement ( ) down`);
 // this blcok is to generate an empty grid
 const gridWidth = 10;
 const gridArray = ref([]);
+const shipLengthArray = ref([5, 4, 3, 3, 2, 2, 1, 1]);
 function generateMap () {
     for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
@@ -37,6 +57,9 @@ function generateMap () {
     }
 }
 generateMap();
+function clearMap () {
+    gridArray.value.forEach(row => row.forEach(cell => { cell.state = 0; }));
+}
 
 // first get a random start point
 function getRandom (max) {
@@ -183,8 +206,12 @@ function doPlacement (coordinate, shipLength, goRight) {
 }
 
 function shipPlacement (shipLength) {
-    let startCell = getRndStart(shipLength);
     // e.g. startCell = {R: 1, C: 2}
+    let startCell = getRndStart(shipLength);
+    if (shipLength === 1) {
+        doPlacement(startCell, shipLength, true);
+        return;
+    }
     let right = placeRightSuccess(startCell, shipLength);
     let down = placeDownSuccess(startCell, shipLength);
     // right and left are boolean values
@@ -207,6 +234,11 @@ function shipPlacement (shipLength) {
     }
     doPlacement(startCell, shipLength, goRight);
 }
+
+function autoMap () {
+    shipLengthArray.value.forEach(len => shipPlacement(len));
+}
+
 // dynamic background color for cells
 function cellColor (state) {
     switch (state) {
