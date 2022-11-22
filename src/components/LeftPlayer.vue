@@ -3,33 +3,25 @@
         <h2>Left Player</h2>
         <!-- clear grid / auto grid / confirm grid -->
         <div>
-            <q-btn
+            <custom-q-btn
                 @click="clearGrid"
-                label="new Grid"
-                color="primary"
-                text-color="secondary"
+                labelText="clear Grid"
             />
-            <q-btn
+            <custom-q-btn
                 @click="autoGrid"
-                label="auto full Grid"
-                color="primary"
-                text-color="secondary"
+                label="auto place"
             />
-            <q-btn
+            <custom-q-btn
                 @click="confirmGrid"
                 label="confirm Grid"
-                color="primary"
-                text-color="secondary"
             />
         </div>
         <!-- auto placement for individual ships -->
         <div>
-            <q-btn
+            <custom-q-btn
                 v-for="(len, i) in shipLengthArray" :key="i"
                 @click="shipPlacement(len)"
-                :label=len
-                color="primary"
-                text-color="secondary"
+                :labelText=len
                 class="buttonRow"
             />
         </div>
@@ -37,19 +29,15 @@
         <div>
             <h3>Pick the size of ship you want to place</h3>
             <h4>Direction of placement : {{ mannualDirection }}</h4>
-            <q-btn
+            <custom-q-btn
                 @click="rotate"
                 label="Rotate"
-                color="primary"
-                text-color="secondary"
                 class="buttonRow"
             />
-            <q-btn
+            <custom-q-btn
                 v-for="(len, i) in shipLengthArray" :key="i"
                 @click="mannualLength = len"
                 :label=len
-                color="primary"
-                text-color="secondary"
                 class="buttonRow"
             />
         </div>
@@ -84,6 +72,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import CustomQBtn from 'src/components/CustomQBtn.vue';
 
 const mannualPlaceRight = ref(true);
 const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
