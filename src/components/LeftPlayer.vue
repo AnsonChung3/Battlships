@@ -27,8 +27,8 @@
         </div>
         <!-- mannual placement -->
         <div>
-            <h3>Pick the size of ship you want to place</h3>
-            <h4>Direction of placement : {{ mannualDirection }}</h4>
+            <p>Pick the size of ship you want to place</p>
+            <p>Direction of placement : {{ mannualDirection }}</p>
             <custom-q-btn
                 @click="rotate"
                 label="Rotate"
@@ -63,7 +63,7 @@
                     class="cell"
                     :style="{background: '#'+cellColor(cell.state)}"
                 >
-                    {{ cell.state }}
+                    <!-- {{ cell.state }} -->
                 </div>
             </div>
         </div>
@@ -119,7 +119,6 @@ function getRndStart (shipLength) {
     }
     return { R, C };
 }
-
 function placeRightSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const col = coordinate.C + len;
