@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Left Player</h2>
+        <h2>Player Panel</h2>
         <!-- clear grid / auto grid / confirm grid -->
         <div>
             <custom-q-btn
@@ -16,7 +16,12 @@
                 label="confirm Grid"
             />
         </div>
+        <q-separator dark spaced/>
         <!-- auto placement for individual ships -->
+        <p>
+            Click the below numbers to auto place individual ships.<br>
+            *Direction of placement is random.
+        </p>
         <div>
             <custom-q-btn
                 v-for="(len, i) in shipLengthArray" :key="i"
@@ -25,8 +30,9 @@
                 class="buttonRow"
             />
         </div>
+        <q-separator dark spaced/>
         <!-- mannual placement -->
-        <div>
+        <div v-if="!gridConfirmed">
             <p>Pick the size of ship you want to place</p>
             <p>Direction of placement : {{ mannualDirection }}</p>
             <custom-q-btn
@@ -289,13 +295,13 @@ function cellColor (state) {
     switch (state) {
     case 0:
         // cell is blank
-        return 'E0E76D';
+        return '948C15';
     case 1:
         // ship is here
-        return 'CA7070';
+        return '971E1E';
     case 2:
         // empty space between ships, cannot be used
-        return '6DA1E7';
+        return '1B4D91';
     case 3:
         // successful hit
         return 'B61A1A';

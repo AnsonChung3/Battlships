@@ -21,15 +21,15 @@
             </q-tab-panels>
         </q-card>
         <div class="row">
-            <left-player class="col"></left-player>
-            <left-player class="col"></left-player>
+            <player-panel class="col"></player-panel>
+            <player-panel class="col"></player-panel>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import LeftPlayer from 'src/components/LeftPlayer.vue';
+import PlayerPanel from 'src/components/PlayerPanel.vue';
 
 const tab = ref('mails');
 
