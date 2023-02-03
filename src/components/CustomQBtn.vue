@@ -8,6 +8,6 @@
 
 <script setup>
 const props = defineProps({
-  labelText: String
-})
+    labelText: String
+});
 </script>
