@@ -80,6 +80,14 @@
 import { ref, computed } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 
+const STATES = {
+    BLANK: 0,
+    PLACE: 1,
+    MARGIN: 2,
+    HIT: 3,
+    MISS: 4
+}
+
 const mannualPlaceRight = ref(true);
 const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
 function rotate () {
@@ -102,7 +110,7 @@ function generateGrid () {
 }
 generateGrid();
 function clearGrid () {
-    gridArray.value.forEach(row => row.forEach(cell => { cell.state = 0; }));
+    gridArray.value.forEach(row => row.forEach(cell => { cell.state = STATES.BLANK; }));
 }
 
 // first get a random start point
@@ -118,7 +126,7 @@ function getRndStart (shipLength) {
 
     // while (cell is unavailable OR not enough space for neither placement direction) is true
     // {get a new random start}
-    while (randomCell.state !== 0 || (R > maxStartArea && C > maxStartArea)) {
+    while (randomCell.state !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
         randomCell = gridArray.value[R][C];
@@ -132,7 +140,7 @@ function placeRightSuccess (coordinate, shipLength) {
             return false;
         }
         const cell = gridArray.value[coordinate.R][col];
-        if (cell.state !== 0) {
+        if (cell.state !== STATES.BLANK) {
             return false;
         }
     }
@@ -145,7 +153,7 @@ function placeDownSuccess (coordinate, shipLength) {
             return false;
         }
         const cell = gridArray.value[row][coordinate.C];
-        if (cell.state !== 0) {
+        if (cell.state !== STATES.BLANK) {
             return false;
         }
     }
@@ -161,82 +169,82 @@ function doPlacement (coordinate, shipLength, goRight) {
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
             // color the ship itself
-            gridArray.value[R][C + i].state = 1;
+            gridArray.value[R][C + i].state = STATES.PLACE;
             // color all 6 blocks on both ends of the ship, if exist
             if (i === 0) {
                 // left col
                 if (C >= 1) {
                     // left end
-                    gridArray.value[R][C - 1].state = 2;
+                    gridArray.value[R][C - 1].state = STATES.MARGIN;
                     // left top
                     if (R >= 1) {
-                        gridArray.value[R - 1][C - 1].state = 2;
+                        gridArray.value[R - 1][C - 1].state = STATES.MARGIN;
                     }
                     // left bttom
                     if (R + 1 < gridWidth) {
-                        gridArray.value[R + 1][C - 1].state = 2;
+                        gridArray.value[R + 1][C - 1].state = STATES.MARGIN;
                     }
                 }
                 // right col
                 if (C + shipLength < gridWidth) {
                     // right end
-                    gridArray.value[R][C + shipLength].state = 2;
+                    gridArray.value[R][C + shipLength].state = STATES.MARGIN;
                     // right top
                     if (R >= 1) {
-                        gridArray.value[R - 1][C + shipLength].state = 2;
+                        gridArray.value[R - 1][C + shipLength].state = STATES.MARGIN;
                     }
                     // right bottom
                     if (R + 1 < gridWidth) {
-                        gridArray.value[R + 1][C + shipLength].state = 2;
+                        gridArray.value[R + 1][C + shipLength].state = STATES.MARGIN;
                     }
                 }
             }
             // if the row above exist
             if (R >= 1) {
                 // color the block above the ship
-                gridArray.value[R - 1][C + i].state = 2;
+                gridArray.value[R - 1][C + i].state = STATES.MARGIN;
             }
             // if bottom row exist
             if (R + 1 < gridWidth) {
-                gridArray.value[R + 1][C + i].state = 2;
+                gridArray.value[R + 1][C + i].state = STATES.MARGIN;
             }
         } else {
             // color the ship itself
-            gridArray.value[R + i][C].state = 1;
+            gridArray.value[R + i][C].state = STATES.PLACE;
             // color all 6 blocks on both ends of the ship, if exist
             if (i === 0) {
                 // if top row exist
                 if (R >= 1) {
-                    gridArray.value[R - 1][C].state = 2;
+                    gridArray.value[R - 1][C].state = STATES.MARGIN;
                     // top left
                     if (C >= 1) {
-                        gridArray.value[R - 1][C - 1].state = 2;
+                        gridArray.value[R - 1][C - 1].state = STATES.MARGIN;
                     }
                     // top right
                     if (C + 1 < gridWidth) {
-                        gridArray.value[R - 1][C + 1].state = 2;
+                        gridArray.value[R - 1][C + 1].state = STATES.MARGIN;
                     }
                 }
                 // if bottom row exist
                 if (R + shipLength < gridWidth) {
-                    gridArray.value[R + shipLength][C].state = 2;
+                    gridArray.value[R + shipLength][C].state = STATES.MARGIN;
                     // bottom left
                     if (C >= 1) {
-                        gridArray.value[R + shipLength][C - 1].state = 2;
+                        gridArray.value[R + shipLength][C - 1].state = STATES.MARGIN;
                     }
                     // bottom right
                     if (C + 1 < gridWidth) {
-                        gridArray.value[R + shipLength][C + 1].state = 2;
+                        gridArray.value[R + shipLength][C + 1].state = STATES.MARGIN;
                     }
                 }
             }
             // left col
             if (C >= 1) {
-                gridArray.value[R + i][C - 1].state = 2;
+                gridArray.value[R + i][C - 1].state = STATES.MARGIN;
             }
             // right col
             if (C + 1 < gridWidth) {
-                gridArray.value[R + i][C + 1].state = 2;
+                gridArray.value[R + i][C + 1].state = STATES.MARGIN;
             }
         }
     }
@@ -283,10 +291,10 @@ function confirmGrid () {
 }
 
 function isHit (coordinate) {
-    if (confirmedArray.value[coordinate.R][coordinate.C].state === 1) {
-        gridArray.value[coordinate.R][coordinate.C].state = 3;
+    if (confirmedArray.value[coordinate.R][coordinate.C].state === STATES.PLACE) {
+        gridArray.value[coordinate.R][coordinate.C].state = STATES.HIT;
     } else {
-        gridArray.value[coordinate.R][coordinate.C].state = 4;
+        gridArray.value[coordinate.R][coordinate.C].state = STATES.MISS;
     }
 }
 
