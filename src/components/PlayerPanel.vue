@@ -1,50 +1,76 @@
 <template>
     <div>
         <h2>Player Panel</h2>
-        <!-- clear grid / auto grid / confirm grid -->
+        <q-card>
+            <q-tabs
+                v-model="tab"
+                active-color="bg-negative"
+                class="bg-primary text-secondary"
+                dense
+            >
+                <q-tab name="auto" label="Auto" />
+                <q-tab name="semiAuto" label="Semi Auto" />
+                <q-tab name="manual" label="Manual" />
+            </q-tabs>
+            <q-tab-panels v-model="tab" class="bg-info">
+                <q-tab-panel name="auto">
+                    <div class="bg-info text-secondary">
+                        <div>
+                            <p>Press button to auto place all ships.</p>
+                            <custom-q-btn
+                                @click="autoGrid"
+                                label="auto place"
+                            />
+                        </div>
+                    </div>
+                </q-tab-panel>
+                <q-tab-panel name="semiAuto">
+                    <div class="bg-info text-secondary">
+                        <p>
+                            Click the below numbers to auto place individual ships.<br>
+                            *Direction of placement is random.
+                        </p>
+                        <div>
+                            <custom-q-btn
+                                v-for="(len, i) in shipLengthArray" :key="i"
+                                @click="shipPlacement(len)"
+                                :labelText=len
+                                class="buttonRow"
+                            />
+                        </div>
+                    </div>
+                </q-tab-panel>
+                <q-tab-panel name="manual">
+                    <div class="bg-info text-secondary">
+                        <div>
+                            <p>Pick the size of ship you want to place</p>
+                            <custom-q-btn
+                                v-for="(len, i) in shipLengthArray" :key="i"
+                                @click="mannualLength = len"
+                                :label=len
+                                class="buttonRow"
+                            />
+                            <p>
+                                Click to rotate:
+                                <custom-q-btn
+                                    @click="rotate"
+                                    :label=mannualDirection
+                                    class="buttonRow"
+                                />
+                            </p>
+                        </div>
+                    </div>
+                </q-tab-panel>
+            </q-tab-panels>
+        </q-card>
         <div>
             <custom-q-btn
                 @click="clearGrid"
-                labelText="clear Grid"
-            />
-            <custom-q-btn
-                @click="autoGrid"
-                label="auto place"
+                label="clear Grid"
             />
             <custom-q-btn
                 @click="confirmGrid"
                 label="confirm Grid"
-            />
-        </div>
-        <q-separator dark spaced/>
-        <!-- auto placement for individual ships -->
-        <p>
-            Click the below numbers to auto place individual ships.<br>
-            *Direction of placement is random.
-        </p>
-        <div>
-            <custom-q-btn
-                v-for="(len, i) in shipLengthArray" :key="i"
-                @click="shipPlacement(len)"
-                :labelText=len
-                class="buttonRow"
-            />
-        </div>
-        <q-separator dark spaced/>
-        <!-- mannual placement -->
-        <div v-if="!gridConfirmed">
-            <p>Pick the size of ship you want to place</p>
-            <p>Direction of placement : {{ mannualDirection }}</p>
-            <custom-q-btn
-                @click="rotate"
-                label="Rotate"
-                class="buttonRow"
-            />
-            <custom-q-btn
-                v-for="(len, i) in shipLengthArray" :key="i"
-                @click="mannualLength = len"
-                :label=len
-                class="buttonRow"
             />
         </div>
         <!-- play area -->
@@ -80,13 +106,15 @@
 import { ref, computed } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 
+const tab = ref('auto');
+
 const STATES = {
     BLANK: 0,
     PLACE: 1,
     MARGIN: 2,
     HIT: 3,
     MISS: 4
-}
+};
 
 const mannualPlaceRight = ref(true);
 const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
