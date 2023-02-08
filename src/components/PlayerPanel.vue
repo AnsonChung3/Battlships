@@ -12,7 +12,10 @@
                 <q-tab name="semiAuto" label="Semi Auto" />
                 <q-tab name="manual"   label="Manual" />
             </q-tabs>
-            <q-tab-panels v-model="tab" class="bg-info">
+            <q-tab-panels
+                v-model="tab"
+                class="bg-info"
+            >
                 <q-tab-panel name="auto">
                     <div class="bg-info text-secondary">
                         <p>Press button to auto place all ships.</p>
@@ -63,12 +66,12 @@
         <div>
             <custom-q-btn
                 @click="clearPlacement"
-                label="clear placement"
+                label="Clear Placement"
             />
             <!-- needs to do some checks before confirm, such as no ship, or wrong number of ships -->
             <custom-q-btn
                 @click="confirmPlacement"
-                label="confirm placement"
+                label="Confirm Placement"
             />
         </div>
         <!-- play area -->
@@ -151,6 +154,7 @@ function confirmPlacement () {
     clearPlacement();
 }
 
+// placement and validation
 function doPlacement (coordinate, shipLength, goRight) {
     const R = coordinate.R;
     const C = coordinate.C;
@@ -237,8 +241,6 @@ function doPlacement (coordinate, shipLength, goRight) {
         }
     }
 }
-
-// ship placement validation
 function placeRightSuccess (coordinate, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const col = coordinate.C + len;
