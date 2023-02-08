@@ -23,6 +23,7 @@
                     </div>
                 </q-tab-panel>
                 <q-tab-panel name="semiAuto">
+                    <!-- this mode may not be kept in the final game -->
                     <div class="bg-info text-secondary">
                         <p>
                             Click the below numbers to auto place individual ships.<br>
@@ -64,6 +65,7 @@
                 @click="clearPlacement"
                 label="clear placement"
             />
+            <!-- needs to do some checks before confirm, such as no ship, or wrong number of ships -->
             <custom-q-btn
                 @click="confirmPlacement"
                 label="confirm placement"
@@ -72,9 +74,14 @@
         <!-- play area -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!-- set up v-if/else block for click logic
-                    v-if (confirmedGrid) { cell@click="checkHit" }
-                    v-else {cell@click="doPlacement"}
+                <!--
+                    maybe there should be one more v-if blocks
+                    if manual placement, then cells are clickable
+                    other wise, if grid is not confirmed, can use manual
+                    if switch back to maual after auto, if should go back to the first condition?
+                    <v-if manualPlacement
+                    <v-if !gridConfirmed
+                    <v-else
                 -->
                 <div
                     v-if="tab==='manual'"
