@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Player Panel</h2>
-        <q-card>
+        <q-card v-if="!gridConfirmed">
             <q-tabs
                 v-model="tab"
                 active-color="bg-negative"
