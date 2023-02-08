@@ -102,6 +102,9 @@ import CustomQBtn from 'src/components/CustomQBtn.vue';
 
 const tab = ref('auto');
 
+const gridWidth = 10;
+const gridArray = ref([]);
+const shipLengthArray = ref([5, 4, 3, 3, 2, 2, 1, 1]);
 const STATES = {
     BLANK: 0,
     PLACE: 1,
@@ -110,17 +113,7 @@ const STATES = {
     MISS: 4
 };
 
-const mannualPlaceRight = ref(true);
-const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
-function rotate () {
-    mannualPlaceRight.value = !mannualPlaceRight.value;
-}
-const mannualLength = ref(0);
-
-// this blcok is to generate an empty grid
-const gridWidth = 10;
-const gridArray = ref([]);
-const shipLengthArray = ref([5, 4, 3, 3, 2, 2, 1, 1]);
+// generation of starting grid
 function generateGrid () {
     for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
@@ -131,62 +124,19 @@ function generateGrid () {
     }
 }
 generateGrid();
+
+// clear and confirming placements
 function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => { cell.state = STATES.BLANK; }));
 }
-
-// first get a random start point
-function getRandom (max) {
-    return Math.floor(Math.random() * max);
+const gridConfirmed = ref(false);
+const confirmedArray = ref([]);
 function confirmPlacement () {
+    confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
+    gridConfirmed.value = true;
     clearPlacement();
 }
-// reutrning an object e.g. {R: 1, C: 1}
-function getRndStart (shipLength) {
-    const maxStartArea = gridWidth - shipLength;
-    let R = getRandom(gridWidth);
-    let C = getRandom(gridWidth);
-    let randomCell = gridArray.value[R][C];
 
-    // while (cell is unavailable OR not enough space for neither placement direction) is true
-    // {get a new random start}
-    while (randomCell.state !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
-        R = getRandom(gridWidth);
-        C = getRandom(gridWidth);
-        randomCell = gridArray.value[R][C];
-    }
-    return { R, C };
-}
-function placeRightSuccess (coordinate, shipLength) {
-    for (let len = 1; len < shipLength; len++) {
-        const col = coordinate.C + len;
-        if (col >= gridWidth) {
-            return false;
-        }
-        const cell = gridArray.value[coordinate.R][col];
-        if (cell.state !== STATES.BLANK) {
-            return false;
-        }
-    }
-    return true;
-}
-function placeDownSuccess (coordinate, shipLength) {
-    for (let len = 1; len < shipLength; len++) {
-        const row = coordinate.R + len;
-        if (row >= gridWidth) {
-            return false;
-        }
-        const cell = gridArray.value[row][coordinate.C];
-        if (cell.state !== STATES.BLANK) {
-            return false;
-        }
-    }
-    return true;
-}
-function directionRight () {
-    // this return a boolean value for ship placement direction
-    return (Math.random() < 0.5);
-}
 function doPlacement (coordinate, shipLength, goRight) {
     const R = coordinate.R;
     const C = coordinate.C;
@@ -274,6 +224,35 @@ function doPlacement (coordinate, shipLength, goRight) {
     }
 }
 
+// ship placement validation
+function placeRightSuccess (coordinate, shipLength) {
+    for (let len = 1; len < shipLength; len++) {
+        const col = coordinate.C + len;
+        if (col >= gridWidth) {
+            return false;
+        }
+        const cell = gridArray.value[coordinate.R][col];
+        if (cell.state !== STATES.BLANK) {
+            return false;
+        }
+    }
+    return true;
+}
+function placeDownSuccess (coordinate, shipLength) {
+    for (let len = 1; len < shipLength; len++) {
+        const row = coordinate.R + len;
+        if (row >= gridWidth) {
+            return false;
+        }
+        const cell = gridArray.value[row][coordinate.C];
+        if (cell.state !== STATES.BLANK) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// computer place methods
 function shipPlacement (shipLength) {
     // e.g. startCell = {R: 1, C: 2}
     let startCell = getRndStart(shipLength);
@@ -301,19 +280,43 @@ function shipPlacement (shipLength) {
     }
     doPlacement(startCell, shipLength, goRight);
 }
+function getRndStart (shipLength) {
+    const maxStartArea = gridWidth - shipLength;
+    let R = getRandom(gridWidth);
+    let C = getRandom(gridWidth);
+    let randomCell = gridArray.value[R][C];
 
+    // while (cell is unavailable OR not enough space for neither placement direction) is true
+    // {get a new random start}
+    while (randomCell.state !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
+        R = getRandom(gridWidth);
+        C = getRandom(gridWidth);
+        randomCell = gridArray.value[R][C];
+    }
+    return { R, C };
+}
+function getRandom (max) {
+    return Math.floor(Math.random() * max);
+}
+function directionRight () {
+    // this return a boolean value for ship placement direction
+    return (Math.random() < 0.5);
+}
+
+// auto place all
 function autoGrid () {
     shipLengthArray.value.forEach(len => shipPlacement(len));
 }
 
-const gridConfirmed = ref(false);
-const confirmedArray = ref([]);
-function confirmGrid () {
-    confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
-    gridConfirmed.value = true;
-    clearGrid();
+// manual mode
+const mannualLength = ref(0);
+const mannualPlaceRight = ref(true);
+const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
+function rotate () {
+    mannualPlaceRight.value = !mannualPlaceRight.value;
 }
 
+// game play
 function isHit (coordinate) {
     if (confirmedArray.value[coordinate.R][coordinate.C].state === STATES.PLACE) {
         gridArray.value[coordinate.R][coordinate.C].state = STATES.HIT;
@@ -322,24 +325,27 @@ function isHit (coordinate) {
     }
 }
 
+function hoverState (R, C) {
+    console.log('hey', R, C);
+    // gridArray.value[R][C].state = 5;
+}
+
 // dynamic background color for cells
 function cellColor (state) {
     switch (state) {
     case 0:
-        // cell is blank
         return '948C15';
     case 1:
-        // ship is here
         return '971E1E';
     case 2:
-        // empty space between ships, cannot be used
         return '1B4D91';
     case 3:
-        // successful hit
         return 'B61A1A';
     case 4:
-        // empty hit
         return 'D4D4D4';
+    // case 5:
+    //     // hover
+    //     return '911B8D';
     }
     return '344152';
 }
