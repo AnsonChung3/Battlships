@@ -44,7 +44,7 @@
                         <p>Pick the size of ship you want to place</p>
                         <custom-q-btn
                             v-for="(len, i) in shipLengthArray" :key="i"
-                            @click="mannualLength = len"
+                            @click="manualLength = len"
                             :label=len
                             class="buttonRow"
                         />
@@ -52,7 +52,7 @@
                             Click to rotate:
                             <custom-q-btn
                                 @click="rotate"
-                                :label=mannualDirection
+                                :label=manualDirectionDisplay
                                 class="buttonRow"
                             />
                         </p>
@@ -85,7 +85,7 @@
                 -->
                 <div
                     v-if="tab==='manual'"
-                    @click="doPlacement({R, C}, mannualLength, mannualPlaceRight)"
+                    @click="manualValidation({R, C}, manualLength, manualPlaceRight)"
                     class="cell"
                     :style="{background: '#'+cellColor(cell.state)}"
                     @mouseover="hoverState(R, C)"
@@ -323,12 +323,22 @@ function autoPlace () {
 }
 
 // manual mode
-const mannualLength = ref(0);
-const mannualPlaceRight = ref(true);
-const mannualDirection = computed(() => mannualPlaceRight.value ? 'Right' : 'Down');
+const manualLength = ref(0);
+const manualPlaceRight = ref(true);
+const manualDirectionDisplay = computed(() => manualPlaceRight.value ? 'Right' : 'Down');
 function rotate () {
-    mannualPlaceRight.value = !mannualPlaceRight.value;
+    manualPlaceRight.value = !manualPlaceRight.value;
 }
+function manualValidation (coordinate, len) {
+    if (manualPlaceRight.value && placeRightSuccess(coordinate, len)) {
+        doPlacement(coordinate, len, true);
+    } else if (!manualPlaceRight.value && placeDownSuccess(coordinate, len)) {
+        doPlacement(coordinate, len, false);
+    } else {
+        alert('Not enough room!');
+    }
+}
+
 
 // game play
 function isHit (coordinate) {
