@@ -17,8 +17,8 @@
                     <div class="bg-info text-secondary">
                         <p>Press button to auto place all ships.</p>
                         <custom-q-btn
-                            @click="autoGrid"
-                            label="auto place"
+                            @click="autoPlace"
+                            label="Auto Place"
                         />
                     </div>
                 </q-tab-panel>
@@ -318,7 +318,7 @@ function directionRight () {
 }
 
 // auto place all
-function autoGrid () {
+function autoPlace () {
     shipLengthArray.value.forEach(len => shipPlacement(len));
 }
 
