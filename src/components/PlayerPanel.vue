@@ -77,8 +77,15 @@
                     v-else {cell@click="doPlacement"}
                 -->
                 <div
-                    v-if="!gridConfirmed"
+                    v-if="tab==='manual'"
                     @click="doPlacement({R, C}, mannualLength, mannualPlaceRight)"
+                    class="cell"
+                    :style="{background: '#'+cellColor(cell.state)}"
+                    @mouseover="hoverState(R, C)"
+                >
+                </div>
+                <div
+                    v-else-if="!gridConfirmed"
                     class="cell"
                     :style="{background: '#'+cellColor(cell.state)}"
                 >
