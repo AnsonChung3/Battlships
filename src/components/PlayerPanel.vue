@@ -61,12 +61,12 @@
         </q-card>
         <div>
             <custom-q-btn
-                @click="clearGrid"
-                label="clear Grid"
+                @click="clearPlacement"
+                label="clear placement"
             />
             <custom-q-btn
-                @click="confirmGrid"
-                label="confirm Grid"
+                @click="confirmPlacement"
+                label="confirm placement"
             />
         </div>
         <!-- play area -->
@@ -131,13 +131,15 @@ function generateGrid () {
     }
 }
 generateGrid();
-function clearGrid () {
+function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => { cell.state = STATES.BLANK; }));
 }
 
 // first get a random start point
 function getRandom (max) {
     return Math.floor(Math.random() * max);
+function confirmPlacement () {
+    clearPlacement();
 }
 // reutrning an object e.g. {R: 1, C: 1}
 function getRndStart (shipLength) {
