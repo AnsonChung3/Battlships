@@ -8,20 +8,18 @@
                 class="bg-primary text-secondary"
                 dense
             >
-                <q-tab name="auto" label="Auto" />
+                <q-tab name="auto"     label="Auto" />
                 <q-tab name="semiAuto" label="Semi Auto" />
-                <q-tab name="manual" label="Manual" />
+                <q-tab name="manual"   label="Manual" />
             </q-tabs>
             <q-tab-panels v-model="tab" class="bg-info">
                 <q-tab-panel name="auto">
                     <div class="bg-info text-secondary">
-                        <div>
-                            <p>Press button to auto place all ships.</p>
-                            <custom-q-btn
-                                @click="autoGrid"
-                                label="auto place"
-                            />
-                        </div>
+                        <p>Press button to auto place all ships.</p>
+                        <custom-q-btn
+                            @click="autoGrid"
+                            label="auto place"
+                        />
                     </div>
                 </q-tab-panel>
                 <q-tab-panel name="semiAuto">
@@ -42,23 +40,21 @@
                 </q-tab-panel>
                 <q-tab-panel name="manual">
                     <div class="bg-info text-secondary">
-                        <div>
-                            <p>Pick the size of ship you want to place</p>
+                        <p>Pick the size of ship you want to place</p>
+                        <custom-q-btn
+                            v-for="(len, i) in shipLengthArray" :key="i"
+                            @click="mannualLength = len"
+                            :label=len
+                            class="buttonRow"
+                        />
+                        <p>
+                            Click to rotate:
                             <custom-q-btn
-                                v-for="(len, i) in shipLengthArray" :key="i"
-                                @click="mannualLength = len"
-                                :label=len
+                                @click="rotate"
+                                :label=mannualDirection
                                 class="buttonRow"
                             />
-                            <p>
-                                Click to rotate:
-                                <custom-q-btn
-                                    @click="rotate"
-                                    :label=mannualDirection
-                                    class="buttonRow"
-                                />
-                            </p>
-                        </div>
+                        </p>
                     </div>
                 </q-tab-panel>
             </q-tab-panels>
@@ -86,8 +82,6 @@
                     class="cell"
                     :style="{background: '#'+cellColor(cell.state)}"
                 >
-                    <!-- {{ [R, C] }} -->
-                    <!-- {{ cell.state }} -->
                 </div>
                 <div
                     v-else
