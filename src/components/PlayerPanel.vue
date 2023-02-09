@@ -2,6 +2,7 @@
     <div>
         <h2>Player Panel</h2>
         <q-card v-if="!gridConfirmed">
+            <!-- add watcher for tab switching, clear placements when switching -->
             <q-tabs
                 v-model="tab"
                 active-color="bg-negative"
@@ -50,7 +51,7 @@
                 @click="clearPlacement"
                 label="Clear Placement"
             />
-            <!-- needs to do some checks before confirm, such as no ship, or wrong number of ships -->
+            <!-- validate before confirm, such as no ship, or wrong number of ships -->
             <custom-q-btn
                 @click="confirmPlacement"
                 label="Confirm Placement"
@@ -59,15 +60,6 @@
         <!-- play area -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!--
-                    maybe there should be one more v-if blocks
-                    if manual placement, then cells are clickable
-                    other wise, if grid is not confirmed, can use manual
-                    if switch back to maual after auto, if should go back to the first condition?
-                    <v-if manualPlacement
-                    <v-if !gridConfirmed
-                    <v-else
-                -->
                 <div
                     v-if="tab==='manual'"
                     @click="manualValidation({R, C}, manualLength, manualPlaceRight)"
