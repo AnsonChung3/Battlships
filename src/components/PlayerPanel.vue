@@ -250,7 +250,10 @@ function placeDownSuccess (coordinate, shipLength) {
     return true;
 }
 
-// computer place methods
+// auto place all
+function autoPlace () {
+    shipLengthArray.value.forEach(len => shipPlacement(len));
+}
 function shipPlacement (shipLength) {
     // e.g. startCell = {R: 1, C: 2}
     let startCell = getRndStart(shipLength);
@@ -301,12 +304,7 @@ function directionRight () {
     return (Math.random() < 0.5);
 }
 
-// auto place all
-function autoPlace () {
-    shipLengthArray.value.forEach(len => shipPlacement(len));
-}
-
-// manual mode
+// manual placing
 const manualLength = ref(0);
 const manualPlaceRight = ref(true);
 const manualDirectionDisplay = computed(() => manualPlaceRight.value ? 'Right' : 'Down');
