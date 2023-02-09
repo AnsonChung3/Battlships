@@ -9,7 +9,6 @@
                 dense
             >
                 <q-tab name="auto"     label="Auto" />
-                <q-tab name="semiAuto" label="Semi Auto" />
                 <q-tab name="manual"   label="Manual" />
             </q-tabs>
             <q-tab-panels
@@ -23,23 +22,6 @@
                             @click="autoPlace"
                             label="Auto Place"
                         />
-                    </div>
-                </q-tab-panel>
-                <q-tab-panel name="semiAuto">
-                    <!-- this mode may not be kept in the final game -->
-                    <div class="bg-info text-secondary">
-                        <p>
-                            Click the below numbers to auto place individual ships.<br>
-                            *Direction of placement is random.
-                        </p>
-                        <div>
-                            <custom-q-btn
-                                v-for="(len, i) in shipLengthArray" :key="i"
-                                @click="shipPlacement(len)"
-                                :labelText=len
-                                class="buttonRow"
-                            />
-                        </div>
                     </div>
                 </q-tab-panel>
                 <q-tab-panel name="manual">
