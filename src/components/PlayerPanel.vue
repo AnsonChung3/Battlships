@@ -1,6 +1,14 @@
 <template>
     <div class="battleship-top-css">
         <h2>Player Panel</h2>
+        <div>
+            {{ shipLengthArray }}
+            {{ propShipLenAr }}
+            <q-btn
+                @click="shipLenIter"
+                label="ship len iter"
+            />
+        </div>
         <q-card v-if="!gridConfirmed">
             <!-- add watcher for tab switching, clear placements when switching -->
             <q-tabs
@@ -103,6 +111,12 @@ const STATES = {
     HIT: 3,
     MISS: 4
 };
+
+// test code
+const propShipLenAr = ref([]);
+function shipLenIter () {
+    propShipLenAr.value = shipLengthArray.value.map((len) => { return { len, place: false }; });
+}
 
 // generation of starting grid
 function generateGrid () {
