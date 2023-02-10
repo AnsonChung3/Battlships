@@ -91,10 +91,12 @@
 import { ref, computed, watch } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 
+// clear placement when switching mode
 const tab = ref('auto');
 watch(tab, (newtab) => {
-    clearPlacement();
+    generateGrid();
 });
+
 const gridWidth = 10;
 const gridArray = ref([]);
 const placementConfirmed = ref(false);
@@ -136,9 +138,6 @@ function generateGrid () {
 }
 generateGrid();
 
-// clear and confirming placements
-function clearPlacement () {
-    gridArray.value.forEach(row => row.forEach(cell => { cell.state = STATES.BLANK; }));
 // generation of ship array, to assist isDestroy and :disabled="fullPlacement"
 function generateShipsArray () {
     shipsArray.value = shipLengths.map((len, index) => {
@@ -158,7 +157,6 @@ const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isP
 // confirming placements and clear display
 function confirmPlacement () {
     confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
-    clearPlacement();
     placementConfirmed.value = true;
     gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
 }
