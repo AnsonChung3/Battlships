@@ -275,13 +275,16 @@ function colorMargin (R, C) {
 
 // auto place all
 function autoPlace () {
-    shipLengths.value.forEach(len => shipPlacement(len));
+    shipsArray.value.forEach((ship) => {
+        shipPlacement(ship.len, ship.ID);
+        ship.isPlaced = true;
+    });
 }
-function shipPlacement (shipLength) {
+function shipPlacement (shipLength, ID) {
     // e.g. startCell = {R: 1, C: 2}
     let startCell = getRndStart(shipLength);
     if (shipLength === 1) {
-        doPlacement(startCell, shipLength, true);
+        doPlacement(startCell, shipLength, true, ID);
         return;
     }
     let right = placeRightSuccess(startCell, shipLength);
@@ -302,7 +305,7 @@ function shipPlacement (shipLength) {
     } else {
         goRight = false;
     }
-    doPlacement(startCell, shipLength, goRight);
+    doPlacement(startCell, shipLength, goRight, ID);
 }
 function getRndStart (shipLength) {
     const maxStartArea = gridWidth - shipLength;
