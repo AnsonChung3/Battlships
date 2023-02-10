@@ -337,10 +337,10 @@ const manualDirectionDisplay = computed(() => manualPlaceRight.value ? 'Right' :
 function rotate () {
     manualPlaceRight.value = !manualPlaceRight.value;
 }
-function manualValidation (coordinate, len) {
-    if (manualPlaceRight.value && placeRightSuccess(coordinate, len)) {
+function manualValidation (coordinate, len, goRight) {
+    if (goRight && placeRightSuccess(coordinate, len)) {
         doPlacement(coordinate, len, true);
-    } else if (!manualPlaceRight.value && placeDownSuccess(coordinate, len)) {
+    } else if (placeDownSuccess(coordinate, len)) {
         doPlacement(coordinate, len, false);
     } else {
         alert('Not enough room!');
