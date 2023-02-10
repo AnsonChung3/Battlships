@@ -48,7 +48,7 @@
         </q-card>
         <div>
             <custom-q-btn
-                @click="clearPlacement"
+                @click="generateGrid"
                 label="Clear Placement"
             />
             <custom-q-btn
@@ -64,21 +64,21 @@
                     v-if="tab==='manual'"
                     @click="manualValidation({R, C}, manualLength, manualPlaceRight)"
                     class="cell"
-                    :style="{background: '#'+cellColor(cell.state)}"
                     @mouseover="hoverState(R, C)"
+                    :style="{background: '#'+cellColor(cell.displayState)}"
                 >
                 </div>
                 <div
                     v-else-if="!gridConfirmed"
                     class="cell"
-                    :style="{background: '#'+cellColor(cell.state)}"
+                    :style="{background: '#'+cellColor(cell.displayState)}"
                 >
                 </div>
                 <div
                     v-else
                     @click="isHit({R, C})"
                     class="cell"
-                    :style="{background: '#'+cellColor(cell.state)}"
+                    :style="{background: '#'+cellColor(cell.displayState)}"
                 >
                     <!-- {{ cell.state }} -->
                 </div>
@@ -116,10 +116,18 @@ function generateShipsArray () {
 
 // generation of starting grid
 function generateGrid () {
+    gridArray.value = [];
     for (let R = 0; R < gridWidth; R++) {
         const rowArray = [];
         for (let C = 0; C < gridWidth; C++) {
-            rowArray.push({ coordinate: `row ${R}, column ${C}`, state: 0 });
+            rowArray.push({
+                // coordinate is only for debugging
+                coordinate: `row ${R}, column ${C}`,
+                displayState: STATES.BLANK,
+                placementState: STATES.BLANK,
+                ID: 0,
+                isHit: false
+            });
         }
         gridArray.value.push(rowArray);
     }
@@ -138,6 +146,7 @@ function confirmPlacement () {
     confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
     gridConfirmed.value = true;
     clearPlacement();
+    gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
 }
 
 // placement and validation
@@ -234,7 +243,7 @@ function placeRightSuccess (coordinate, shipLength) {
             return false;
         }
         const cell = gridArray.value[coordinate.R][col];
-        if (cell.state !== STATES.BLANK) {
+        if (cell.placementState !== STATES.BLANK) {
             return false;
         }
     }
@@ -247,7 +256,7 @@ function placeDownSuccess (coordinate, shipLength) {
             return false;
         }
         const cell = gridArray.value[row][coordinate.C];
-        if (cell.state !== STATES.BLANK) {
+        if (cell.placementState !== STATES.BLANK) {
             return false;
         }
     }
@@ -293,7 +302,7 @@ function getRndStart (shipLength) {
 
     // while (cell is unavailable OR not enough space for neither placement direction) is true
     // {get a new random start}
-    while (randomCell.state !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
+    while (randomCell.placementState !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
         randomCell = gridArray.value[R][C];
