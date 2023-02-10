@@ -1,7 +1,7 @@
 <template>
     <div class="battleship-top-css">
         <h2>Player Panel</h2>
-        <q-card v-if="!gridConfirmed">
+        <q-card v-if="!placementConfirmed">
             <!-- add watcher for tab switching, clear placements when switching -->
             <q-tabs
                 v-model="tab"
@@ -69,7 +69,7 @@
                 >
                 </div>
                 <div
-                    v-else-if="!gridConfirmed"
+                    v-else-if="!placementConfirmed"
                     class="cell"
                     :style="{background: '#'+cellColor(cell.displayState)}"
                 >
@@ -97,6 +97,7 @@ watch(tab, (newtab) => {
 });
 const gridWidth = 10;
 const gridArray = ref([]);
+const placementConfirmed = ref(false);
 const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
 const shipsArray = ref([]);
 const STATES = {
@@ -150,15 +151,15 @@ function generateShipsArray () {
         };
     });
 }
-const gridConfirmed = ref(false);
 const confirmedArray = ref([]);
 generateShipsArray();
 const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isPlaced));
 
+// confirming placements and clear display
 function confirmPlacement () {
     confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
-    gridConfirmed.value = true;
     clearPlacement();
+    placementConfirmed.value = true;
     gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
 }
 
