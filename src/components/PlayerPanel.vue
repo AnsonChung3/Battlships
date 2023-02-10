@@ -150,87 +150,84 @@ function confirmPlacement () {
 }
 
 // placement and validation
-function doPlacement (coordinate, shipLength, goRight) {
+function doPlacement (coordinate, shipLength, goRight, ID) {
     const R = coordinate.R;
     const C = coordinate.C;
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
-            // color the ship itself
-            gridArray.value[R][C + i].state = STATES.PLACE;
-            // color all 6 blocks on both ends of the ship, if exist
+            colorShip(R, C + i, ID);
+            // color left/right end of ship once
             if (i === 0) {
-                // left col
+                // left end
                 if (C >= 1) {
-                    // left end
-                    gridArray.value[R][C - 1].state = STATES.MARGIN;
+                    colorMargin(R, C - 1);
                     // left top
                     if (R >= 1) {
-                        gridArray.value[R - 1][C - 1].state = STATES.MARGIN;
+                        colorMargin(R - 1, C - 1);
                     }
                     // left bttom
                     if (R + 1 < gridWidth) {
-                        gridArray.value[R + 1][C - 1].state = STATES.MARGIN;
+                        colorMargin(R + 1, C - 1);
                     }
                 }
-                // right col
+                // right end
                 if (C + shipLength < gridWidth) {
-                    // right end
-                    gridArray.value[R][C + shipLength].state = STATES.MARGIN;
+                    colorMargin(R, C + shipLength);
                     // right top
                     if (R >= 1) {
-                        gridArray.value[R - 1][C + shipLength].state = STATES.MARGIN;
+                        colorMargin(R - 1, C + shipLength);
                     }
                     // right bottom
                     if (R + 1 < gridWidth) {
-                        gridArray.value[R + 1][C + shipLength].state = STATES.MARGIN;
+                        colorMargin(R + 1, C + shipLength);
                     }
                 }
             }
-            // if the row above exist
+            // if the row above exist, color cell above
             if (R >= 1) {
-                // color the block above the ship
-                gridArray.value[R - 1][C + i].state = STATES.MARGIN;
+                colorMargin(R - 1, C + i);
             }
-            // if bottom row exist
+            // if bottom row existm coloe cell below
             if (R + 1 < gridWidth) {
-                gridArray.value[R + 1][C + i].state = STATES.MARGIN;
+                colorMargin(R + 1, C + i);
             }
         } else {
-            // color the ship itself
-            gridArray.value[R + i][C].state = STATES.PLACE;
-            // color all 6 blocks on both ends of the ship, if exist
+            colorShip(R + i, C, ID);
+            // color top/bottom ends once
             if (i === 0) {
-                // if top row exist
+                // top end
                 if (R >= 1) {
-                    gridArray.value[R - 1][C].state = STATES.MARGIN;
+                    colorMargin(R - 1, C);
                     // top left
                     if (C >= 1) {
-                        gridArray.value[R - 1][C - 1].state = STATES.MARGIN;
+                        colorMargin(R - 1, C - 1);
                     }
                     // top right
                     if (C + 1 < gridWidth) {
-                        gridArray.value[R - 1][C + 1].state = STATES.MARGIN;
+                        colorMargin(R - 1, C + 1);
                     }
                 }
-                // if bottom row exist
+                // bottom end
                 if (R + shipLength < gridWidth) {
-                    gridArray.value[R + shipLength][C].state = STATES.MARGIN;
+                    colorMargin(R + shipLength, C);
                     // bottom left
                     if (C >= 1) {
-                        gridArray.value[R + shipLength][C - 1].state = STATES.MARGIN;
+                        colorMargin(R + shipLength, C - 1);
                     }
                     // bottom right
                     if (C + 1 < gridWidth) {
-                        gridArray.value[R + shipLength][C + 1].state = STATES.MARGIN;
+                        colorMargin(R + shipLength, C + 1);
                     }
                 }
             }
             // left col
             if (C >= 1) {
+                colorMargin(R + i, C - 1);
                 gridArray.value[R + i][C - 1].state = STATES.MARGIN;
             }
             // right col
             if (C + 1 < gridWidth) {
+                colorMargin(R + i, C + 1);
                 gridArray.value[R + i][C + 1].state = STATES.MARGIN;
             }
         }
@@ -261,6 +258,15 @@ function placeDownSuccess (coordinate, shipLength) {
         }
     }
     return true;
+}
+function colorShip (R, C, ID) {
+    gridArray.value[R][C].displayState = STATES.PLACED;
+    gridArray.value[R][C].placementState = STATES.PLACED;
+    gridArray.value[R][C].ID = ID;
+}
+function colorMargin (R, C) {
+    gridArray.value[R][C].displayState = STATES.MARGIN;
+    gridArray.value[R][C].placementState = STATES.MARGIN;
 }
 
 // auto place all
