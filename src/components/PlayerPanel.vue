@@ -282,28 +282,18 @@ function autoPlace () {
 }
 function shipPlacement (shipLength, ID) {
     // e.g. startCell = {R: 1, C: 2}
-    let startCell = getRndStart(shipLength);
+    const startCell = getRndStart(shipLength);
     if (shipLength === 1) {
         doPlacement(startCell, shipLength, true, ID);
         return;
     }
-    let right = placeRightSuccess(startCell, shipLength);
-    let down = placeDownSuccess(startCell, shipLength);
-    // right and left are boolean values
-    // while (the start cell is available, but it is blocked in both direction) is ture
-    // {get a new random start and check if any direction is viable}
-    while (!right && !down) {
-        startCell = getRndStart(shipLength);
-        right = placeRightSuccess(startCell, shipLength);
-        down = placeDownSuccess(startCell, shipLength);
-    }
+    const right = placeRightSuccess(startCell, shipLength);
+    const down = placeDownSuccess(startCell, shipLength);
     let goRight = true;
-    if (right && down) {
-        goRight = directionRight();
-    } else if (right) {
-        goRight = true;
-    } else {
+    if (!right) {
         goRight = false;
+    } else if (right && down) {
+        goRight = directionRight();
     }
     doPlacement(startCell, shipLength, goRight, ID);
 }
@@ -313,7 +303,7 @@ function getRndStart (shipLength) {
     let C = getRandom(gridWidth);
     let randomCell = gridArray.value[R][C];
 
-    // while (cell is unavailable OR not enough space for neither placement direction) is true
+    // while (cell is unavailable OR can be placed in neither direction) is true
     // {get a new random start}
     while (randomCell.placementState !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
         R = getRandom(gridWidth);
@@ -326,7 +316,7 @@ function getRandom (max) {
     return Math.floor(Math.random() * max);
 }
 function directionRight () {
-    // this return a boolean value for ship placement direction
+    // rnd when right and down are both viable
     return (Math.random() < 0.5);
 }
 
