@@ -2,10 +2,10 @@
     <div class="battleship-top-css">
         <h2>Player Panel</h2>
         <div>
-            {{ shipLengthArray }}
-            {{ propShipLenAr }}
+            {{ shipLengths }}
+            {{ shipsArray }}
             <q-btn
-                @click="shipLenIter"
+                @click="generateShipsArray"
                 label="ship len iter"
             />
         </div>
@@ -37,7 +37,7 @@
                     <div class="bg-info text-secondary">
                         <p>Pick the size of ship you want to place</p>
                         <custom-q-btn
-                            v-for="(len, i) in shipLengthArray" :key="i"
+                            v-for="(len, i) in shipLengths" :key="i"
                             @click="manualLength = len"
                             :label=len
                             class="buttonRow"
@@ -105,19 +105,21 @@ watch(tab, (newtab) => {
 });
 const gridWidth = 10;
 const gridArray = ref([]);
-const shipLengthArray = ref([5, 4, 3, 3, 2, 2, 1, 1]);
+const shipLengths = ref([5, 4, 3, 3, 2, 2, 1, 1]);
 const STATES = {
     BLANK: 0,
     PLACE: 1,
     MARGIN: 2,
     HIT: 3,
     MISS: 4
+    // HOVER_PLACE: 5,
+    // HOVER_MARGIN: 6
 };
 
 // test code
-const propShipLenAr = ref([]);
-function shipLenIter () {
-    propShipLenAr.value = shipLengthArray.value.map((len) => { return { len, place: false }; });
+const shipsArray = ref([]);
+function generateShipsArray () {
+    shipsArray.value = shipLengths.value.map((len) => { return { len, place: false }; });
 }
 
 // generation of starting grid
@@ -260,7 +262,7 @@ function placeDownSuccess (coordinate, shipLength) {
 
 // auto place all
 function autoPlace () {
-    shipLengthArray.value.forEach(len => shipPlacement(len));
+    shipLengths.value.forEach(len => shipPlacement(len));
 }
 function shipPlacement (shipLength) {
     // e.g. startCell = {R: 1, C: 2}
