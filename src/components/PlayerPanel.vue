@@ -112,12 +112,6 @@ const STATES = {
     // HOVER_MARGIN: 6
 };
 
-// test code
-const shipsArray = ref([]);
-function generateShipsArray () {
-    shipsArray.value = shipLengths.value.map((len) => { return { len, place: false }; });
-}
-
 // generation of starting grid
 function generateGrid () {
     gridArray.value = [];
@@ -150,13 +144,11 @@ function generateShipsArray () {
         };
     });
 }
-const confirmedArray = ref([]);
 generateShipsArray();
 const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isPlaced));
 
 // confirming placements and clear display
 function confirmPlacement () {
-    confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
     placementConfirmed.value = true;
     gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
 }
