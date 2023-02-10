@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="battleship-top-css">
         <h2>Player Panel</h2>
         <q-card v-if="!gridConfirmed">
             <!-- add watcher for tab switching, clear placements when switching -->
@@ -363,5 +363,8 @@ function cellColor (state) {
 }
 .buttonRow {
     margin-bottom: 2%
+}
+.battleship-top-css {
+    margin: 0% 1% 5% 1%
 }
 </style>
