@@ -1,14 +1,6 @@
 <template>
     <div class="battleship-top-css">
         <h2>Player Panel</h2>
-        <div>
-            {{ shipLengths }}
-            {{ shipsArray }}
-            <q-btn
-                @click="generateShipsArray"
-                label="ship len iter"
-            />
-        </div>
         <q-card v-if="!gridConfirmed">
             <!-- add watcher for tab switching, clear placements when switching -->
             <q-tabs
