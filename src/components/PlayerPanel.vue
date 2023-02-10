@@ -51,8 +51,8 @@
                 @click="clearPlacement"
                 label="Clear Placement"
             />
-            <!-- validate before confirm, such as no ship, or wrong number of ships -->
             <custom-q-btn
+                :disabled=!isFullPlacement
                 @click="confirmPlacement"
                 label="Confirm Placement"
             />
@@ -132,6 +132,8 @@ function clearPlacement () {
 }
 const gridConfirmed = ref(false);
 const confirmedArray = ref([]);
+const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isPlaced));
+
 function confirmPlacement () {
     confirmedArray.value = JSON.parse(JSON.stringify(gridArray.value));
     gridConfirmed.value = true;
