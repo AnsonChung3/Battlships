@@ -96,11 +96,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 
 const tab = ref('auto');
-
+watch(tab, (newtab) => {
+    clearPlacement();
+});
 const gridWidth = 10;
 const gridArray = ref([]);
 const shipLengthArray = ref([5, 4, 3, 3, 2, 2, 1, 1]);
