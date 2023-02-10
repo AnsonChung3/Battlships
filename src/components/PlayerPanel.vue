@@ -97,7 +97,8 @@ watch(tab, (newtab) => {
 });
 const gridWidth = 10;
 const gridArray = ref([]);
-const shipLengths = ref([5, 4, 3, 3, 2, 2, 1, 1]);
+const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
+const shipsArray = ref([]);
 const STATES = {
     BLANK: 0,
     PLACE: 1,
@@ -137,9 +138,21 @@ generateGrid();
 // clear and confirming placements
 function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => { cell.state = STATES.BLANK; }));
+// generation of ship array, to assist isDestroy and :disabled="fullPlacement"
+function generateShipsArray () {
+    shipsArray.value = shipLengths.map((len, index) => {
+        return {
+            len,
+            ID: index + 1,
+            isPlaced: false,
+            // isDestroyed: ,
+            coordinates: []
+        };
+    });
 }
 const gridConfirmed = ref(false);
 const confirmedArray = ref([]);
+generateShipsArray();
 const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isPlaced));
 
 function confirmPlacement () {
