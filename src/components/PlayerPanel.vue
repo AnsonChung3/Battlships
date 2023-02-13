@@ -1,6 +1,6 @@
 <template>
     <div class="battleship-top-css">
-        <h2>Player Panel</h2>
+        <h2>{{ props.player }}</h2>
         <q-card v-if="!placementConfirmed">
             <!-- add watcher for tab switching, clear placements when switching -->
             <q-tabs
@@ -90,6 +90,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
+
+const props = defineProps({
+    player: String
+});
 
 // clear placement when switching mode
 const tab = ref('auto');
