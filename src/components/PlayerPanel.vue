@@ -340,10 +340,15 @@ function manualValidation (coordinate, len, goRight) {
 
 // game play
 function isHit (coordinate) {
-    if (confirmedArray.value[coordinate.R][coordinate.C].state === STATES.PLACE) {
-        gridArray.value[coordinate.R][coordinate.C].state = STATES.HIT;
+    const checkCell = gridArray.value[coordinate.R][coordinate.C];
+    if (checkCell.placementState === STATES.PLACED) {
+        checkCell.displayState = STATES.HIT;
+        // should check if such ship is destroyed
+        // if (computed isDestroyed === true) {
+        //      shipsArray.value.(checkCell.ID - 1).isDestroyed = true;
+        // }
     } else {
-        gridArray.value[coordinate.R][coordinate.C].state = STATES.MISS;
+        checkCell.displayState = STATES.MISS;
     }
 }
 
