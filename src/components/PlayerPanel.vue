@@ -139,7 +139,7 @@ function generateShipsArray () {
             len,
             ID: index + 1,
             isPlaced: false,
-            // isDestroyed: ,
+            isDestroyed: false,
             coordinates: []
         };
     });
@@ -339,14 +339,26 @@ function manualValidation (coordinate, len, goRight) {
 
 
 // game play
+const emit = defineEmits(['game-end']);
+
 function isHit (coordinate) {
     const checkCell = gridArray.value[coordinate.R][coordinate.C];
     if (checkCell.placementState === STATES.PLACED) {
         checkCell.displayState = STATES.HIT;
+        checkCell.isHit = true;
         // should check if such ship is destroyed
         // if (computed isDestroyed === true) {
         //      shipsArray.value.(checkCell.ID - 1).isDestroyed = true;
         // }
+        if (isDestroyed(checkCell.ID)) {
+            shipsArray.value[checkCell.ID - 1].isDestroyed = true;
+            console.log(`ship ID ${shipsArray.value[checkCell.ID - 1].ID} is destroyed`);
+            const isEnd = shipsArray.value.every(ship => ship.isDestroyed);
+            if (isEnd) {
+                console.log('end');
+                emit('game-end');
+            }
+        }
     } else {
         checkCell.displayState = STATES.MISS;
     }
@@ -355,6 +367,9 @@ function isHit (coordinate) {
 function hoverState (R, C) {
     console.log('hey', R, C);
     // gridArray.value[R][C].state = 5;
+function isDestroyed (ID) {
+    const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
+    return (cells.every(cell => cell.isHit));
 }
 
 // dynamic background color for cells
