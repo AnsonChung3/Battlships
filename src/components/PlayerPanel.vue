@@ -1,7 +1,7 @@
 <template>
     <div class="battleship-top-css">
         <h2>{{ props.player }}</h2>
-        <!-- placement tab area -->
+        <!-- placement tab / destroy status area -->
         <div v-if="!placementConfirmed">
             <q-card>
                 <q-tabs
@@ -56,6 +56,27 @@
                     label="Confirm Placement"
                 />
             </div>
+        </div>
+        <div v-else class="progressPanel">
+            <!-- this needs some serious css / aesthetic work -->
+            <p>Ships Left</p>
+            <div v-for="(ship) in shipsArray" :key=ship.ID class="inline">
+                <custom-q-btn
+                    :disabled="ship.isDestroyed"
+                    :label=ship.ID
+                />
+            </div>
+            <!-- <q-card class="bg-info text-secondary">
+                <q-card-section>
+                    <p>Ships Left</p>
+                    <div v-for="(ship) in shipsArray" :key=ship.ID class="inline">
+                        <custom-q-btn
+                            :disabled="ship.isDestroyed"
+                            :label=ship.ID
+                        />
+                    </div>
+                </q-card-section>
+            </q-card> -->
         </div>
         <!-- play area -->
         <div v-for="(row, R) in gridArray" :key="R">
@@ -141,8 +162,7 @@ function generateShipsArray () {
             len,
             ID: index + 1,
             isPlaced: false,
-            isDestroyed: false,
-            coordinates: []
+            isDestroyed: false
         };
     });
 }
@@ -417,6 +437,11 @@ function cellColor (state) {
 }
 .buttonRow {
     margin-bottom: 2%
+}
+.progressPanel {
+    background:#B2B2B2;
+    color: #1E1E1E;
+    margin: 1%
 }
 .battleship-top-css {
     margin: 0% 1% 5% 1%
