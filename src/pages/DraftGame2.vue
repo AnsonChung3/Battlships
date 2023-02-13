@@ -2,8 +2,16 @@
     <div>
         <h1>{{ sampleText }}</h1>
         <div class="row">
-            <player-panel class="col"></player-panel>
-            <player-panel class="col" @game-end="end" player="Player 1"></player-panel>
+            <player-panel
+                @game-end="end"
+                player="Player 1"
+                class="col"
+            />
+            <player-panel
+                @game-end="end"
+                player="Player 2"
+                class="col"
+            />
         </div>
     </div>
 </template>

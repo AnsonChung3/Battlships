@@ -4,3 +4,6 @@
         text-color="secondary"
     />
 </template>
+
+<script setup>
+</script>

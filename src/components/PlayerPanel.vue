@@ -108,7 +108,7 @@ const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
 const shipsArray = ref([]);
 const STATES = {
     BLANK: 0,
-    PLACE: 1,
+    PLACED: 1,
     MARGIN: 2,
     HIT: 3,
     MISS: 4
@@ -350,10 +350,6 @@ function isHit (coordinate) {
     if (checkCell.placementState === STATES.PLACED) {
         checkCell.displayState = STATES.HIT;
         checkCell.isHit = true;
-        // should check if such ship is destroyed
-        // if (computed isDestroyed === true) {
-        //      shipsArray.value.(checkCell.ID - 1).isDestroyed = true;
-        // }
         if (isDestroyed(checkCell.ID)) {
             shipsArray.value[checkCell.ID - 1].isDestroyed = true;
             console.log(`ship ID ${shipsArray.value[checkCell.ID - 1].ID} is destroyed`);
