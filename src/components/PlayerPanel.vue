@@ -1,17 +1,6 @@
 <template>
     <div class="battleship-top-css">
         <h2>{{ props.player }}</h2>
-                <q-tab-panel name="manual">
-                    <div class="bg-info text-secondary">
-                        <p>Pick the size of ship you want to place</p>
-                        <custom-q-btn
-                            v-for="(len, i) in shipLengths" :key="i"
-                            @click="manualLength = len"
-                            :label=len
-                            class="buttonRow"
-                        />
-                        <p>
-                            Click to rotate:
         <!-- placement tab area -->
         <div v-if="!placementConfirmed">
             <q-card>
@@ -34,14 +23,26 @@
                             />
                         </div>
                     </q-tab-panel>
+                    <q-tab-panel name="manual">
+                        <div class="bg-info text-secondary">
+                            <p>Pick the size of ship you want to place</p>
                             <custom-q-btn
-                                @click="rotate"
-                                :label=manualDirectionDisplay
+                                v-for="(ship) in shipsArray" :key="ship.ID"
+                                @click="shipSelect(ship.ID)"
+                                :label=ship.len
+                                :disabled="ship.isPlaced"
                                 class="buttonRow"
                             />
-                        </p>
-                    </div>
-                </q-tab-panel>
+                            <p>
+                                Click to rotate:
+                                <custom-q-btn
+                                    @click="rotate"
+                                    :label=manualDirectionDisplay
+                                    class="buttonRow"
+                                />
+                            </p>
+                        </div>
+                    </q-tab-panel>
                 </q-tab-panels>
             </q-card>
             <div>
@@ -59,19 +60,16 @@
         <!-- play area -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
+                <!-- cells are clickable when in manual mode -->
                 <div
-                    v-if="tab==='manual'"
-                    @click="manualValidation({R, C}, manualLength, manualPlaceRight)"
-                    class="cell"
-                    @mouseover="hoverState(R, C)"
-                    :style="{background: '#'+cellColor(cell.displayState)}"
-                >
-                </div>
-                <div
-                    v-else-if="!placementConfirmed"
+                    v-if="!placementConfirmed"
+                    @click="manualValidation({R, C}, manualID, manualPlaceRight)"
+                    @mouseover="hoverState({R, C})"
                     class="cell"
                     :style="{background: '#'+cellColor(cell.displayState)}"
                 >
+                    ID: {{ cell.ID }}
+                    P: {{ cell.placementState }}
                 </div>
                 <div
                     v-else
@@ -79,7 +77,7 @@
                     class="cell"
                     :style="{background: '#'+cellColor(cell.displayState)}"
                 >
-                    <!-- {{ cell.state }} -->
+                    ID: {{ cell.ID }}
                     P: {{ cell.placementState }}
                 </div>
             </div>
@@ -325,22 +323,34 @@ function directionRight () {
 }
 
 // manual placing
-const manualLength = ref(0);
+const manualID = ref(0);
 const manualPlaceRight = ref(true);
 const manualDirectionDisplay = computed(() => manualPlaceRight.value ? 'Right' : 'Down');
+const manualSelect = ref(false);
 function rotate () {
     manualPlaceRight.value = !manualPlaceRight.value;
 }
-function manualValidation (coordinate, len, goRight) {
-    if (goRight && placeRightSuccess(coordinate, len)) {
-        doPlacement(coordinate, len, true);
-    } else if (placeDownSuccess(coordinate, len)) {
-        doPlacement(coordinate, len, false);
+function manualValidation (coordinate, ID, goRight) {
+    if ((tab.value === 'auto') || (manualSelect.value === false)) {
+        return;
+    }
+    const len = shipsArray.value[ID - 1].len;
+    if ((goRight && placeRightSuccess(coordinate, len)) || (!goRight && placeDownSuccess(coordinate, len))) {
+        doPlacement(coordinate, len, goRight, ID);
+        shipsArray.value[ID - 1].isPlaced = true;
+        manualSelect.value = false;
     } else {
         alert('Not enough room!');
     }
 }
-
+function shipSelect (ID) {
+    manualID.value = ID;
+    manualSelect.value = true;
+}
+function hoverState (R, C) {
+    // console.log('hey', R, C);
+    // gridArray.value[R][C].state = 5;
+}
 
 // game play
 const emit = defineEmits(['game-end']);
