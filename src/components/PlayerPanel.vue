@@ -1,30 +1,6 @@
 <template>
     <div class="battleship-top-css">
         <h2>{{ props.player }}</h2>
-        <q-card v-if="!placementConfirmed">
-            <!-- add watcher for tab switching, clear placements when switching -->
-            <q-tabs
-                v-model="tab"
-                active-color="bg-negative"
-                class="bg-primary text-secondary"
-                dense
-            >
-                <q-tab name="auto"     label="Auto" />
-                <q-tab name="manual"   label="Manual" />
-            </q-tabs>
-            <q-tab-panels
-                v-model="tab"
-                class="bg-info"
-            >
-                <q-tab-panel name="auto">
-                    <div class="bg-info text-secondary">
-                        <p>Press button to auto place all ships.</p>
-                        <custom-q-btn
-                            @click="autoPlace"
-                            label="Auto Place"
-                        />
-                    </div>
-                </q-tab-panel>
                 <q-tab-panel name="manual">
                     <div class="bg-info text-secondary">
                         <p>Pick the size of ship you want to place</p>
@@ -36,6 +12,28 @@
                         />
                         <p>
                             Click to rotate:
+        <!-- placement tab area -->
+        <div v-if="!placementConfirmed">
+            <q-card>
+                <q-tabs
+                    v-model="tab"
+                    active-color="bg-negative"
+                    class="bg-primary text-secondary"
+                    dense
+                >
+                    <q-tab name="auto"     label="Auto"/>
+                    <q-tab name="manual"   label="Manual"/>
+                </q-tabs>
+                <q-tab-panels v-model="tab" class="bg-info">
+                    <q-tab-panel name="auto">
+                        <div class="bg-info text-secondary">
+                            <p>Press button to auto place all ships.</p>
+                            <custom-q-btn
+                                @click="autoPlace"
+                                label="Auto Place"
+                            />
+                        </div>
+                    </q-tab-panel>
                             <custom-q-btn
                                 @click="rotate"
                                 :label=manualDirectionDisplay
@@ -44,18 +42,19 @@
                         </p>
                     </div>
                 </q-tab-panel>
-            </q-tab-panels>
-        </q-card>
-        <div>
-            <custom-q-btn
-                @click="generateGrid"
-                label="Clear Placement"
-            />
-            <custom-q-btn
-                :disabled=!isFullPlacement
-                @click="confirmPlacement"
-                label="Confirm Placement"
-            />
+                </q-tab-panels>
+            </q-card>
+            <div>
+                <custom-q-btn
+                    @click="generateGrid"
+                    label="Clear Placement"
+                />
+                <custom-q-btn
+                    :disabled=!isFullPlacement
+                    @click="confirmPlacement"
+                    label="Confirm Placement"
+                />
+            </div>
         </div>
         <!-- play area -->
         <div v-for="(row, R) in gridArray" :key="R">
@@ -81,6 +80,7 @@
                     :style="{background: '#'+cellColor(cell.displayState)}"
                 >
                     <!-- {{ cell.state }} -->
+                    P: {{ cell.placementState }}
                 </div>
             </div>
         </div>
