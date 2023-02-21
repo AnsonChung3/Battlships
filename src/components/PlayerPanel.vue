@@ -20,6 +20,7 @@
                             <custom-q-btn
                                 @click="autoPlace"
                                 label="Auto Place"
+                                :disabled=isFullPlacement
                             />
                         </div>
                     </q-tab-panel>
@@ -47,7 +48,7 @@
             </q-card>
             <div>
                 <custom-q-btn
-                    @click="generateGrid"
+                    @click="clearPlacement"
                     label="Clear Placement"
                 />
                 <custom-q-btn
@@ -110,7 +111,7 @@ const props = defineProps({
 // clear placement when switching mode
 const tab = ref('auto');
 watch(tab, (newtab) => {
-    generateGrid();
+    clearPlacement();
 });
 
 const gridWidth = 10;
@@ -166,6 +167,11 @@ const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isP
 function confirmPlacement () {
     placementConfirmed.value = true;
     gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
+}
+
+function clearPlacement () {
+    generateGrid();
+    generateShipsArray();
 }
 
 // placement and validation
