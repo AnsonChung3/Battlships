@@ -5,4 +5,5 @@ export default () => {
     setCssVar('secondary', '#1E1E1E');
     setCssVar('negative', '#929292');
     setCssVar('info', '#B2B2B2');
+    setCssVar('warning', '#B61A1A');
 };
