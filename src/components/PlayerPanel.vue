@@ -87,11 +87,19 @@
                     ID: {{ cell.ID }}
                     P: {{ cell.placementState }}
                 </div>
+                <!-- display at play stage
+                when it's home turn, it should show
+                (1)Dis:PLACED Pla:PLACED Dam:BLANK
+                (2)Dis:HIT Pla:PLACED Dam:HIT
+                (3)Dis:MISS Pla:!PLACED
+                when it's opponent's turn, it should show
+                (1)HIT
+                (2)MISS -->
                 <div
                     v-else
                     @click="isHit({R, C})"
                     class="cell"
-                    :style="{background: '#'+cellColor(cell.displayState)}"
+                    :style="{background: '#'+homeCell(R, C)}"
                 >
                     ID: {{ cell.ID }}
                     P: {{ cell.placementState }}
@@ -378,20 +386,15 @@ const emit = defineEmits(['game-end']);
 
 function isHit (coordinate) {
     const checkCell = gridArray.value[coordinate.R][coordinate.C];
-    if (checkCell.placementState === STATES.PLACED) {
-        checkCell.displayState = STATES.HIT;
-        checkCell.isHit = true;
-        if (isDestroyed(checkCell.ID)) {
-            shipsArray.value[checkCell.ID - 1].isDestroyed = true;
-            console.log(`ship ID ${shipsArray.value[checkCell.ID - 1].ID} is destroyed`);
-            const isEnd = shipsArray.value.every(ship => ship.isDestroyed);
-            if (isEnd) {
-                console.log('end');
-                emit('game-end');
-            }
+    checkCell.isHit = true;
+    if (checkCell.placementState === STATES.PLACED && isDestroyed(checkCell.ID)) {
+        shipsArray.value[checkCell.ID - 1].isDestroyed = true;
+        console.log(`ship ID ${shipsArray.value[checkCell.ID - 1].ID} is destroyed`);
+        const isEnd = shipsArray.value.every(ship => ship.isDestroyed);
+        if (isEnd) {
+            console.log(`emit end from ${props.player}`);
+            emit('game-end');
         }
-    } else {
-        checkCell.displayState = STATES.MISS;
     }
 }
 
@@ -423,6 +426,34 @@ function cellColor (state) {
     return '344152';
 }
 
+const homePanel = ref(true);
+
+function homeCell (R, C) {
+    const cell = gridArray.value[R][C];
+    if (homePanel.value) {
+        if (cell.placementState === STATES.PLACED) {
+            if (cell.isHit) {
+                return 'B61A1A';
+            } else {
+                return '971E1E';
+            }
+        } else {
+            if (cell.isHit) {
+                return 'D4D4D4';
+            } else {
+                return '948C15';
+            }
+        }
+    } else {
+        if (!cell.isHit) {
+            return '948C15';
+        } else if (cell.placementState === STATES.PLACED) {
+            return 'B61A1A';
+        } else {
+            return 'D4D4D4';
+        }
+    }
+}
 </script>
 
 <style scoped>
