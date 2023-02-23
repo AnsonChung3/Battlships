@@ -312,19 +312,22 @@ function autoPlace () {
 function shipPlacement (shipLength, ID) {
     // e.g. startCell = {R: 1, C: 2}
     const startCell = getRndStart(shipLength);
+    const R = startCell.R;
+    const C = startCell.C;
+    console.log(startCell);
     if (shipLength === 1) {
-        doPlacement(startCell, shipLength, true, ID);
+        doPlacement(R, C, shipLength, true, ID);
         return;
     }
-    const right = placeRightSuccess(startCell, shipLength);
-    const down = placeDownSuccess(startCell, shipLength);
+    const right = placeRightSuccess(R, C, shipLength);
+    const down = placeDownSuccess(R, C, shipLength);
     let goRight = true;
     if (!right) {
         goRight = false;
     } else if (right && down) {
         goRight = directionRight();
     }
-    doPlacement(startCell, shipLength, goRight, ID);
+    doPlacement(R, C, shipLength, goRight, ID);
 }
 function getRndStart (shipLength) {
     const maxStartArea = gridWidth - shipLength;
