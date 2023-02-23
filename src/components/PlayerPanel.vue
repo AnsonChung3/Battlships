@@ -82,7 +82,7 @@
                     @click="manualValidation({R, C}, manualID, manualPlaceRight)"
                     @mouseover="hoverState({R, C})"
                     class="cell"
-                    :style="{background: '#'+cellColor(cell.displayState)}"
+                    :style="{background: '#'+cellColor(R, C)}"
                 >
                     ID: {{ cell.ID }}
                     P: {{ cell.placementState }}
@@ -99,7 +99,7 @@
                     v-else
                     @click="isHit({R, C})"
                     class="cell"
-                    :style="{background: '#'+homeCell(R, C)}"
+                    :style="{background: '#'+cellColor(R, C)}"
                 >
                     ID: {{ cell.ID }}
                     P: {{ cell.placementState }}
@@ -407,25 +407,6 @@ function isDestroyed (ID) {
 }
 
 // dynamic background color for cells
-function cellColor (state) {
-    switch (state) {
-    case 0:
-        return '948C15';
-    case 1:
-        return '971E1E';
-    case 2:
-        return '1B4D91';
-    case 3:
-        return 'B61A1A';
-    case 4:
-        return 'D4D4D4';
-    // case 5:
-    //     // hover
-    //     return '911B8D';
-    }
-    return '344152';
-}
-
 const homePanel = ref(true);
 const COLORS = {
     BLANK: '948C15',
@@ -435,9 +416,18 @@ const COLORS = {
     MISS: '383232'
 };
 
-function homeCell (R, C) {
+function cellColor (R, C) {
     const cell = gridArray.value[R][C];
-    if (homePanel.value) {
+    if (!placementConfirmed.value) {
+        if (cell.placementState === STATES.PLACED) {
+            return COLORS.HIT;
+        }
+        if (cell.placementState === STATES.MARGIN) {
+            return COLORS.MARGIN;
+        } else {
+            return COLORS.BLANK;
+        }
+    } else if (homePanel.value) {
         if (cell.placementState === STATES.PLACED) {
             if (cell.isHit) {
                 return COLORS.HIT;
