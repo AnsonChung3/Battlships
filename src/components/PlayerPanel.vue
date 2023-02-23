@@ -79,7 +79,7 @@
                 <!-- cells are clickable when in manual mode -->
                 <div
                     v-if="!placementConfirmed"
-                    @click="manualValidation({R, C}, manualID, manualPlaceRight)"
+                    @click="manualValidation(R, C, manualID, manualPlaceRight)"
                     @mouseover="hoverState({R, C})"
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
@@ -97,7 +97,7 @@
                 (2)MISS -->
                 <div
                     v-else
-                    @click="isHit({R, C})"
+                    @click="isHit(R, C)"
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
@@ -185,9 +185,7 @@ function clearPlacement () {
 }
 
 // placement and validation
-function doPlacement (coordinate, shipLength, goRight, ID) {
-    const R = coordinate.R;
-    const C = coordinate.C;
+function doPlacement (R, C, shipLength, goRight, ID) {
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
             colorShip(R, C + i, ID);
@@ -268,26 +266,26 @@ function doPlacement (coordinate, shipLength, goRight, ID) {
         }
     }
 }
-function placeRightSuccess (coordinate, shipLength) {
+function placeRightSuccess (R, C, shipLength) {
     for (let len = 1; len < shipLength; len++) {
-        const col = coordinate.C + len;
+        const col = C + len;
         if (col >= gridWidth) {
             return false;
         }
-        const cell = gridArray.value[coordinate.R][col];
+        const cell = gridArray.value[R][col];
         if (cell.placementState !== STATES.BLANK) {
             return false;
         }
     }
     return true;
 }
-function placeDownSuccess (coordinate, shipLength) {
+function placeDownSuccess (R, C, shipLength) {
     for (let len = 1; len < shipLength; len++) {
-        const row = coordinate.R + len;
+        const row = R + len;
         if (row >= gridWidth) {
             return false;
         }
-        const cell = gridArray.value[row][coordinate.C];
+        const cell = gridArray.value[row][C];
         if (cell.placementState !== STATES.BLANK) {
             return false;
         }
@@ -359,13 +357,13 @@ const manualSelect = ref(false);
 function rotate () {
     manualPlaceRight.value = !manualPlaceRight.value;
 }
-function manualValidation (coordinate, ID, goRight) {
+function manualValidation (R, C, ID, goRight) {
     if ((tab.value === 'auto') || (manualSelect.value === false)) {
         return;
     }
     const len = shipsArray.value[ID - 1].len;
-    if ((goRight && placeRightSuccess(coordinate, len)) || (!goRight && placeDownSuccess(coordinate, len))) {
-        doPlacement(coordinate, len, goRight, ID);
+    if ((goRight && placeRightSuccess(R, C, len)) || (!goRight && placeDownSuccess(R, C, len))) {
+        doPlacement(R, C, len, goRight, ID);
         shipsArray.value[ID - 1].isPlaced = true;
         manualSelect.value = false;
     } else {
@@ -384,8 +382,8 @@ function hoverState (R, C) {
 // game play
 const emit = defineEmits(['game-end']);
 
-function isHit (coordinate) {
-    const checkCell = gridArray.value[coordinate.R][coordinate.C];
+function isHit (R, C) {
+    const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
     if (checkCell.placementState === STATES.PLACED && isDestroyed(checkCell.ID)) {
         shipsArray.value[checkCell.ID - 1].isDestroyed = true;
