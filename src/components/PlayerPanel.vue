@@ -31,7 +31,7 @@
                                 v-for="(ship) in shipsArray" :key="ship.ID"
                                 @click="shipSelect(ship.ID)"
                                 :label=ship.len
-                                :disabled="ship.isPlaced"
+                                :disabled="ship.isSet"
                                 class="buttonRow"
                             />
                             <p>
@@ -67,7 +67,7 @@
                     <div v-for="(ship) in shipsArray" :key=ship.ID class="inline">
                         <progress-q-btn
                             :label=ship.ID
-                            :shipState=ship.isDestroyed
+                            :shipState=ship.isSunk
                         />
                     </div>
                 </q-card-section>
@@ -85,7 +85,7 @@
                     :style="{background: '#'+cellColor(R, C)}"
                 >
                     ID: {{ cell.ID }}
-                    P: {{ cell.placementState }}
+                    P: {{ cell.placement }}
                 </div>
                 <!-- display at play stage
                 when it's home turn, it should show
@@ -97,12 +97,12 @@
                 (2)MISS -->
                 <div
                     v-else
-                    @click="isHit(R, C)"
+                    @click="isAttackLand(R, C)"
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
                     ID: {{ cell.ID }}
-                    P: {{ cell.placementState }}
+                    P: {{ cell.placement }}
                 </div>
             </div>
         </div>
@@ -148,8 +148,8 @@ function generateGrid () {
             rowArray.push({
                 // coordinate is only for debugging
                 coordinate: `row ${R}, column ${C}`,
-                displayState: STATES.BLANK,
-                placementState: STATES.BLANK,
+                display: STATES.BLANK,
+                placement: STATES.BLANK,
                 ID: 0,
                 isHit: false
             });
@@ -165,18 +165,18 @@ function generateShipsArray () {
         return {
             len,
             ID: index + 1,
-            isPlaced: false,
-            isDestroyed: false
+            isSet: false,
+            isSunk: false
         };
     });
 }
 generateShipsArray();
-const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isPlaced));
+const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
 
 // confirming placements and clear display
 function confirmPlacement () {
     placementConfirmed.value = true;
-    gridArray.value.forEach(row => row.forEach(cell => { cell.displayState = STATES.BLANK; }));
+    gridArray.value.forEach(row => row.forEach(cell => { cell.display = STATES.BLANK; }));
 }
 
 function clearPlacement () {
@@ -256,12 +256,10 @@ function doPlacement (R, C, shipLength, goRight, ID) {
             // left col
             if (C >= 1) {
                 colorMargin(R + i, C - 1);
-                gridArray.value[R + i][C - 1].state = STATES.MARGIN;
             }
             // right col
             if (C + 1 < gridWidth) {
                 colorMargin(R + i, C + 1);
-                gridArray.value[R + i][C + 1].state = STATES.MARGIN;
             }
         }
     }
@@ -273,7 +271,7 @@ function placeRightSuccess (R, C, shipLength) {
             return false;
         }
         const cell = gridArray.value[R][col];
-        if (cell.placementState !== STATES.BLANK) {
+        if (cell.placement !== STATES.BLANK) {
             return false;
         }
     }
@@ -286,27 +284,27 @@ function placeDownSuccess (R, C, shipLength) {
             return false;
         }
         const cell = gridArray.value[row][C];
-        if (cell.placementState !== STATES.BLANK) {
+        if (cell.placement !== STATES.BLANK) {
             return false;
         }
     }
     return true;
 }
 function colorShip (R, C, ID) {
-    gridArray.value[R][C].displayState = STATES.PLACED;
-    gridArray.value[R][C].placementState = STATES.PLACED;
+    gridArray.value[R][C].display = STATES.PLACED;
+    gridArray.value[R][C].placement = STATES.PLACED;
     gridArray.value[R][C].ID = ID;
 }
 function colorMargin (R, C) {
-    gridArray.value[R][C].displayState = STATES.MARGIN;
-    gridArray.value[R][C].placementState = STATES.MARGIN;
+    gridArray.value[R][C].display = STATES.MARGIN;
+    gridArray.value[R][C].placement = STATES.MARGIN;
 }
 
 // auto place all
 function autoPlace () {
     shipsArray.value.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);
-        ship.isPlaced = true;
+        ship.isSet = true;
     });
 }
 function shipPlacement (shipLength, ID) {
@@ -314,7 +312,6 @@ function shipPlacement (shipLength, ID) {
     const startCell = getRndStart(shipLength);
     const R = startCell.R;
     const C = startCell.C;
-    console.log(startCell);
     if (shipLength === 1) {
         doPlacement(R, C, shipLength, true, ID);
         return;
@@ -333,14 +330,14 @@ function getRndStart (shipLength) {
     const maxStartArea = gridWidth - shipLength;
     let R = getRandom(gridWidth);
     let C = getRandom(gridWidth);
-    let randomCell = gridArray.value[R][C];
+    let rndCell = gridArray.value[R][C];
 
     // while (cell is unavailable OR can be placed in neither direction) is true
     // {get a new random start}
-    while (randomCell.placementState !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
+    while (rndCell.placement !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
         R = getRandom(gridWidth);
         C = getRandom(gridWidth);
-        randomCell = gridArray.value[R][C];
+        rndCell = gridArray.value[R][C];
     }
     return { R, C };
 }
@@ -361,13 +358,13 @@ function rotate () {
     manualPlaceRight.value = !manualPlaceRight.value;
 }
 function manualValidation (R, C, ID, goRight) {
-    if ((tab.value === 'auto') || (manualSelect.value === false)) {
+    if ((tab.value === 'auto') || !manualSelect.value) {
         return;
     }
     const len = shipsArray.value[ID - 1].len;
     if ((goRight && placeRightSuccess(R, C, len)) || (!goRight && placeDownSuccess(R, C, len))) {
         doPlacement(R, C, len, goRight, ID);
-        shipsArray.value[ID - 1].isPlaced = true;
+        shipsArray.value[ID - 1].isSet = true;
         manualSelect.value = false;
     } else {
         alert('Not enough room!');
@@ -385,13 +382,13 @@ function hoverState (R, C) {
 // game play
 const emit = defineEmits(['game-end']);
 
-function isHit (R, C) {
+function isAttackLand (R, C) {
     const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
-    if (checkCell.placementState === STATES.PLACED && isDestroyed(checkCell.ID)) {
-        shipsArray.value[checkCell.ID - 1].isDestroyed = true;
-        console.log(`ship ID ${shipsArray.value[checkCell.ID - 1].ID} is destroyed`);
-        const isEnd = shipsArray.value.every(ship => ship.isDestroyed);
+    if (checkCell.placement === STATES.PLACED && isDestroyed(checkCell.ID)) {
+        shipsArray.value[checkCell.ID - 1].isSunk = true;
+        console.log(`ship ID ${checkCell.ID} is destroyed`);
+        const isEnd = shipsArray.value.every(ship => ship.isSunk);
         if (isEnd) {
             console.log(`emit end from ${props.player}`);
             emit('game-end');
@@ -420,16 +417,16 @@ const COLORS = {
 function cellColor (R, C) {
     const cell = gridArray.value[R][C];
     if (!placementConfirmed.value) {
-        if (cell.placementState === STATES.PLACED) {
+        if (cell.placement === STATES.PLACED) {
             return COLORS.HIT;
         }
-        if (cell.placementState === STATES.MARGIN) {
+        if (cell.placement === STATES.MARGIN) {
             return COLORS.MARGIN;
         } else {
             return COLORS.BLANK;
         }
     } else if (homePanel.value) {
-        if (cell.placementState === STATES.PLACED) {
+        if (cell.placement === STATES.PLACED) {
             if (cell.isHit) {
                 return COLORS.HIT;
             } else {
@@ -445,7 +442,7 @@ function cellColor (R, C) {
     } else {
         if (!cell.isHit) {
             return COLORS.BLANK;
-        } else if (cell.placementState === STATES.PLACED) {
+        } else if (cell.placement === STATES.PLACED) {
             return COLORS.HIT;
         } else {
             return COLORS.MISS;
