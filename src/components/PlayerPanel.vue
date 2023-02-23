@@ -427,30 +427,37 @@ function cellColor (state) {
 }
 
 const homePanel = ref(true);
+const COLORS = {
+    BLANK: '948C15',
+    PLACED: '1F9415',
+    MARGIN: '13468C',
+    HIT: '921313',
+    MISS: '383232'
+};
 
 function homeCell (R, C) {
     const cell = gridArray.value[R][C];
     if (homePanel.value) {
         if (cell.placementState === STATES.PLACED) {
             if (cell.isHit) {
-                return 'B61A1A';
+                return COLORS.HIT;
             } else {
-                return '971E1E';
+                return COLORS.PLACED;
             }
         } else {
             if (cell.isHit) {
-                return 'D4D4D4';
+                return COLORS.MISS;
             } else {
-                return '948C15';
+                return COLORS.BLANK;
             }
         }
     } else {
         if (!cell.isHit) {
-            return '948C15';
+            return COLORS.BLANK;
         } else if (cell.placementState === STATES.PLACED) {
-            return 'B61A1A';
+            return COLORS.HIT;
         } else {
-            return 'D4D4D4';
+            return COLORS.MISS;
         }
     }
 }
