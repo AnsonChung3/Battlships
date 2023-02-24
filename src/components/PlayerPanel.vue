@@ -138,6 +138,7 @@ const STATES = {
     // HOVER_PLACE: 5,
     // HOVER_MARGIN: 6
 };
+const emit = defineEmits(['game-end', 'confirm', 'shoot']);
 
 // generation of starting grid
 function generateGrid () {
@@ -177,6 +178,7 @@ const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isS
 function confirmPlacement () {
     placementConfirmed.value = true;
     gridArray.value.forEach(row => row.forEach(cell => { cell.display = STATES.BLANK; }));
+    emit('confirm');
 }
 
 function clearPlacement () {
@@ -380,8 +382,6 @@ function hoverState (R, C) {
 }
 
 // game play
-const emit = defineEmits(['game-end']);
-
 function isAttackLand (R, C) {
     const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
@@ -394,6 +394,7 @@ function isAttackLand (R, C) {
             emit('game-end');
         }
     }
+    emit('shoot');
 }
 
 function hoverState (R, C) {
