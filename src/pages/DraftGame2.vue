@@ -11,7 +11,7 @@
                     v-show="p1Active"
                     @confirm="playerConfirm(1)"
                     @game-end="end"
-                    @click="coverToggle"
+                    @shoot="playerTakeTurn"
                     player="Player 1"
                 />
                 <div v-show="!p1Active">
@@ -23,7 +23,7 @@
                     v-show="!p1Active"
                     @confirm="playerConfirm(2)"
                     @game-end="end"
-                    @click="coverToggle"
+                    @shoot="playerTakeTurn"
                     player="Player 2"
                 />
                 <div v-show="p1Active">
@@ -40,8 +40,8 @@ import PlayerPanel from 'src/components/PlayerPanel.vue';
 
 const headerText = ref(`Battleship`);
 const p1Active = ref(false);
-const leftConfirmedPlace = ref(false);
-const rightConfirmedPlace = ref(false);
+const p1Confirm = ref(false);
+const p2Confirm = ref(false);
 const msgForP1 = ref('Player 1 please confirm placement.');
 const msgForP2 = ref('Player 2 please confirm placement.');
 
@@ -53,16 +53,16 @@ function playerConfirm (P) {
     console.log(`player ${P} confirm`);
     p1Active.value = !p1Active.value;
     if (P === 1) {
-        leftConfirmedPlace.value = true;
+        p1Confirm.value = true;
         msgForP1.value = `Player 1's turn to shoot`;
     } else {
-        rightConfirmedPlace.value = true;
+        p2Confirm.value = true;
         msgForP2.value = `Player 2's turn to shoot`;
     }
 }
 
-function coverToggle () {
-    if (leftConfirmedPlace.value === true && rightConfirmedPlace.value === true) {
+function playerTakeTurn () {
+    if (p1Confirm.value === true && p2Confirm.value === true) {
         console.log('cover toggle');
         setTimeout(() => {
             p1Active.value = !p1Active.value;
