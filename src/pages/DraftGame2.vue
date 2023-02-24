@@ -2,16 +2,16 @@
     <div>
         <h1>{{ sampleText }}</h1>
         <q-btn
-            @click="coverLeft = !coverLeft"
+            @click="p1Active = !p1Active"
             label="toggle"
         />
         <div class="row">
             <div class="col">
-                <div v-show="coverLeft">
+                <div v-show="p1Active">
                     <h1> {{ msgForRight }} </h1>
                 </div>
                 <player-panel
-                    v-show="!coverLeft"
+                    v-show="!p1Active"
                     @confirm="confirmLeft"
                     @game-end="end"
                     @click="coverToggle"
@@ -19,11 +19,11 @@
                 />
             </div>
             <div class="col">
-                <div v-show="!coverLeft">
+                <div v-show="!p1Active">
                     <h1> {{ msgForLeft }} </h1>
                 </div>
                 <player-panel
-                    v-show="coverLeft"
+                    v-show="p1Active"
                     @confirm="confirmRight"
                     @game-end="end"
                     @click="coverToggle"
@@ -39,7 +39,7 @@ import { ref } from 'vue';
 import PlayerPanel from 'src/components/PlayerPanel.vue';
 
 const sampleText = ref(`Battleship`);
-const coverLeft = ref(false);
+const p1Active = ref(false);
 const leftConfirmedPlace = ref(false);
 const rightConfirmedPlace = ref(false);
 const msgForLeft = ref('Player 1 please confirm placement.');
@@ -51,14 +51,14 @@ function end () {
 
 function confirmLeft () {
     console.log('confirm left');
-    coverLeft.value = !coverLeft.value;
+    p1Active.value = !p1Active.value;
     leftConfirmedPlace.value = true;
     msgForLeft.value = `Player 1's turn to shoot`;
 }
 
 function confirmRight () {
     console.log('confirm right');
-    // coverLeft.value = !coverLeft.value;
+    // p1Active.value = !p1Active.value;
     rightConfirmedPlace.value = true;
     msgForRight.value = `Player 2's turn to shoot`;
 }
@@ -67,7 +67,7 @@ function coverToggle () {
     if (leftConfirmedPlace.value === true && rightConfirmedPlace.value === true) {
         console.log('cover toggle');
         setTimeout(() => {
-            coverLeft.value = !coverLeft.value;
+            p1Active.value = !p1Active.value;
         }, 1500);
     }
 }
