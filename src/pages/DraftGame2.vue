@@ -7,28 +7,28 @@
         />
         <div class="row">
             <div class="col">
-                <div v-show="!p1Active">
-                    <h1> {{ msgForP2 }} </h1>
-                </div>
                 <player-panel
                     v-show="p1Active"
-                    @confirm="confirmLeft"
+                    @confirm="playerConfirm(1)"
                     @game-end="end"
                     @click="coverToggle"
                     player="Player 1"
                 />
+                <div v-show="!p1Active">
+                    <h1> {{ msgForP2 }} </h1>
+                </div>
             </div>
             <div class="col">
-                <div v-show="p1Active">
-                    <h1> {{ msgForP1 }} </h1>
-                </div>
                 <player-panel
                     v-show="!p1Active"
-                    @confirm="confirmRight"
+                    @confirm="playerConfirm(2)"
                     @game-end="end"
                     @click="coverToggle"
                     player="Player 2"
                 />
+                <div v-show="p1Active">
+                    <h1> {{ msgForP1 }} </h1>
+                </div>
             </div>
         </div>
     </div>
@@ -49,18 +49,16 @@ function end () {
     console.log('draft game 2');
 }
 
-function confirmLeft () {
-    console.log('confirm left');
+function playerConfirm (P) {
+    console.log(`player ${P} confirm`);
     p1Active.value = !p1Active.value;
-    leftConfirmedPlace.value = true;
-    msgForP1.value = `Player 1's turn to shoot`;
-}
-
-function confirmRight () {
-    console.log('confirm right');
-    // p1Active.value = !p1Active.value;
-    rightConfirmedPlace.value = true;
-    msgForP2.value = `Player 2's turn to shoot`;
+    if (P === 1) {
+        leftConfirmedPlace.value = true;
+        msgForP1.value = `Player 1's turn to shoot`;
+    } else {
+        rightConfirmedPlace.value = true;
+        msgForP2.value = `Player 2's turn to shoot`;
+    }
 }
 
 function coverToggle () {
