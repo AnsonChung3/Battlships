@@ -73,7 +73,7 @@
                 </q-card-section>
             </q-card>
         </div>
-        <!-- play area -->
+        <!-- grid area -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <!-- cells are clickable when in manual mode -->
@@ -401,13 +401,17 @@ function isAttackLand (R, C) {
 function hoverState (R, C) {
     console.log('hey', R, C);
     // gridArray.value[R][C].state = 5;
+}
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
     return (cells.every(cell => cell.isHit));
 }
 
 // dynamic background color for cells
-const homePanel = ref(true);
+
+// home panel should be a boolean prop passed from the parent
+// need extra step for reactivity
+const homePanel = toRef(props, 'home');
 const COLORS = {
     BLANK: '948C15',
     PLACED: '1F9415',

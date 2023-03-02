@@ -61,17 +61,17 @@
 </template>
 
 <script setup>
-tab
-custom-q-btn
-isFullPlacement
-shipsArray
-shipSelect
-manualDirectionDisplay
-rotate
-clearPlacement
-confirmPlacement
+// tab
+// custom-q-btn
+// isFullPlacement
+// shipsArray
+// shipSelect
+// manualDirectionDisplay
+// rotate
+// clearPlacement
+// confirmPlacement
 </script>
 
 <style scoped>
-buttonRow
+/* buttonRow */
 </style>
