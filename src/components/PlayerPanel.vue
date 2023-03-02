@@ -110,12 +110,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, toRef, computed, watch } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import ProgressQBtn from 'src/components/ProgressQBtn.vue';
 
 const props = defineProps({
-    player: String
+    player: String,
+    home: Boolean
 });
 
 // clear placement when switching mode
