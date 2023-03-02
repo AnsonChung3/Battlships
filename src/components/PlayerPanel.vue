@@ -136,8 +136,6 @@ const STATES = {
     MARGIN: 2,
     HIT: 3,
     MISS: 4
-    // HOVER_PLACE: 5,
-    // HOVER_MARGIN: 6
 };
 const emit = defineEmits(['game-end', 'confirm', 'shoot']);
 
