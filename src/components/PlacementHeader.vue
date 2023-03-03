@@ -15,12 +15,13 @@
                     <div class="bg-info text-secondary">
                         <p>Press button to auto place all ships.</p>
                         <custom-q-btn
-                            @click="autoPlace"
+                            @click="store.autoPlace()"
                             label="Auto Place"
                             :disabled=isFullPlacement
                         />
                     </div>
                 </q-tab-panel>
+                <!-- manual mode will be worked on when auto mode is finished modding -->
                 <q-tab-panel name="manual">
                     <div class="bg-info text-secondary">
                         <p>Pick the size of ship you want to place</p>
@@ -62,12 +63,17 @@
 import { ref } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 
+import { useBattleshipStore } from 'stores/battleship.js';
+const store = useBattleshipStore();
+
 const tab = ref('auto');
 // isFullPlacement
+
+// clearPlacement
+// confirmPlacement
+
 // shipsArray
 // shipSelect
 // manualDirectionDisplay
 // rotate
-// clearPlacement
-// confirmPlacement
 </script>
