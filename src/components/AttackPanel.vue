@@ -6,7 +6,6 @@
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
                 <div
-                    v-if="homePanel"
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
@@ -14,7 +13,7 @@
                     P: {{ cell.placement }}
                 </div>
                 <!-- cells are only clickable when it's showing as opponent panel -->
-                <div
+                <!-- <div
                     v-else
                     @click="isAttackLand(R, C)"
                     class="cell"
@@ -22,14 +21,71 @@
                 >
                     ID: {{ cell.ID }}
                     P: {{ cell.placement }}
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-// const gridArray = store.gridArray
+import { toRef } from 'vue';
+
+import { useBattleshipStore } from 'stores/battleship.js';
+const store = useBattleshipStore();
+const gridArray = toRef(store, 'gridArray');
+const STATES = store.STATES;
+const COLORS = store.COLORS;
+
+
+function cellColor (R, C) {
+    const cell = gridArray.value[R][C];
+    if (cell.placement === STATES.PLACED) {
+        if (cell.isHit) {
+            return COLORS.HIT;
+        } else {
+            return COLORS.PLACED;
+        }
+    } else {
+        if (cell.isHit) {
+            return COLORS.MISS;
+        } else {
+            return COLORS.BLANK;
+        }
+    }
+}
+    // if (!placementConfirmed.value) {
+    //     if (cell.placement === STATES.PLACED) {
+    //         return COLORS.HIT;
+    //     }
+    //     if (cell.placement === STATES.MARGIN) {
+    //         return COLORS.MARGIN;
+    //     } else {
+    //         return COLORS.BLANK;
+    //     }
+    // } else if (homePanel.value) {
+    //     if (cell.placement === STATES.PLACED) {
+    //         if (cell.isHit) {
+    //             return COLORS.HIT;
+    //         } else {
+    //             return COLORS.PLACED;
+    //         }
+    //     } else {
+    //         if (cell.isHit) {
+    //             return COLORS.MISS;
+    //         } else {
+    //             return COLORS.BLANK;
+    //         }
+    //     }
+    // } else {
+    //     if (!cell.isHit) {
+    //         return COLORS.BLANK;
+    //     } else if (cell.placement === STATES.PLACED) {
+    //         return COLORS.HIT;
+    //     } else {
+    //         return COLORS.MISS;
+    //     }
+    // }
+
 // props.homePanel
 
 // function isAttackLand (R, C) {
