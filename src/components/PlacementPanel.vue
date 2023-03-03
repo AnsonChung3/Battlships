@@ -2,7 +2,7 @@
     <div>
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!-- cells are clickable when in manual mode -->
+                <!-- cells are clickable only when in manual mode -->
                 <div
                     v-if="!placementConfirmed"
                     @click="manualValidation(R, C, manualID, manualPlaceRight)"

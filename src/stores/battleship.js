@@ -44,7 +44,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
     function autoPlace () {
         console.log('auto place');
     }
-
+    // these 2 enums can stay as is because they have no need for reactivity
     const STATES = {
         BLANK: 0,
         PLACED: 1,
@@ -52,7 +52,6 @@ export const useBattleshipStore = defineStore('battleship', () => {
         HIT: 3,
         MISS: 4
     }
-
     const COLORS = {
         BLANK: '948C15',
         PLACED: '1F9415',
