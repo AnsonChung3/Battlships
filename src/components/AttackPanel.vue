@@ -36,7 +36,7 @@ const gridArray = toRef(store, 'gridArray');
 const STATES = store.STATES;
 const COLORS = store.COLORS;
 
-
+// cellColor can be further modded to with only home/opponent view
 function cellColor (R, C) {
     const cell = gridArray.value[R][C];
     if (cell.placement === STATES.PLACED) {
@@ -52,17 +52,7 @@ function cellColor (R, C) {
             return COLORS.BLANK;
         }
     }
-}
-    // if (!placementConfirmed.value) {
-    //     if (cell.placement === STATES.PLACED) {
-    //         return COLORS.HIT;
-    //     }
-    //     if (cell.placement === STATES.MARGIN) {
-    //         return COLORS.MARGIN;
-    //     } else {
-    //         return COLORS.BLANK;
-    //     }
-    // } else if (homePanel.value) {
+    // if (homePanel.value) {
     //     if (cell.placement === STATES.PLACED) {
     //         if (cell.isHit) {
     //             return COLORS.HIT;
@@ -85,7 +75,9 @@ function cellColor (R, C) {
     //         return COLORS.MISS;
     //     }
     // }
+}
 
+// homePanel doesn't need to be props any more, just make it a store state
 // props.homePanel
 
 // function isAttackLand (R, C) {
