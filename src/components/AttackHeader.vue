@@ -26,9 +26,3 @@ store.generateShipsArray();
 const shipsArray = toRef(store, 'shipsArray');
 
 </script>
-
-<style scoped>
-/* .inline {
-  display: inline-block;
-} */
-</style>
