@@ -32,9 +32,17 @@ import { toRef } from 'vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
-const gridArray = toRef(store, 'gridArray');
 const STATES = store.STATES;
 const COLORS = store.COLORS;
+
+// gridArray should later be modded to another prop?
+const gridArray = toRef(store, 'gridArray');
+
+// const props = defineProps({
+//     home: Boolean
+// });
+// homePanel = toRef(props, 'home');
+// homePanel needs to be props
 
 // cellColor can be further modded to with only home/opponent view
 function cellColor (R, C) {
@@ -52,7 +60,9 @@ function cellColor (R, C) {
             return COLORS.BLANK;
         }
     }
-    // if (homePanel.value) {
+    // this stretch of comment is basically the finished version of coloring logic
+    // delete the top after homePanel is set up
+    // if (homePanel.value === true) {
     //     if (cell.placement === STATES.PLACED) {
     //         if (cell.isHit) {
     //             return COLORS.HIT;
@@ -77,9 +87,7 @@ function cellColor (R, C) {
     // }
 }
 
-// homePanel doesn't need to be props any more, just make it a store state
-// props.homePanel
-
+// dependent methods for isAttackLand: isDestroyed, isEnd
 // function isAttackLand (R, C) {
 //     const checkCell = gridArray.value[R][C];
 //     checkCell.isHit = true;
@@ -92,11 +100,8 @@ function cellColor (R, C) {
 //             emit('game-end');
 //         }
 //     }
+// no need to emit anymore? as it can take turn by changing p1Active from anywhere
 //     emit('shoot');
 // }
-</script>
 
-<style scoped>
-/* inline
-cell */
-</style>
+</script>
