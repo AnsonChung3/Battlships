@@ -17,6 +17,12 @@
 
 <script setup>
 // shipsArray
+import { toRef }from 'vue';
+import { useBattleshipStore } from 'stores/battleship.js';
+
+const store = useBattleshipStore();
+const shipsArray = toRef(store, 'shipsLenghts');
+
 </script>
 
 <style scoped>

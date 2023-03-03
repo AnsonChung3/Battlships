@@ -29,9 +29,23 @@
 </template>
 
 <script setup>
-// const gridArray
+// const gridArray = store.gridArray
 // props.homePanel
-// function isAttackLand
+
+// function isAttackLand (R, C) {
+//     const checkCell = gridArray.value[R][C];
+//     checkCell.isHit = true;
+//     if (checkCell.placement === STATES.PLACED && isDestroyed(checkCell.ID)) {
+//         shipsArray.value[checkCell.ID - 1].isSunk = true;
+//         console.log(`ship ID ${checkCell.ID} is destroyed`);
+//         const isEnd = shipsArray.value.every(ship => ship.isSunk);
+//         if (isEnd) {
+//             console.log(`emit end from ${props.player}`);
+//             emit('game-end');
+//         }
+//     }
+//     emit('shoot');
+// }
 </script>
 
 <style scoped>
