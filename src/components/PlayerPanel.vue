@@ -80,7 +80,6 @@
                 <div
                     v-if="!placementConfirmed"
                     @click="manualValidation(R, C, manualID, manualPlaceRight)"
-                    @mouseover="hoverState({R, C})"
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
@@ -375,10 +374,6 @@ function shipSelect (ID) {
     manualID.value = ID;
     manualSelect.value = true;
 }
-function hoverState (R, C) {
-    // console.log('hey', R, C);
-    // gridArray.value[R][C].state = 5;
-}
 
 // game play
 function isAttackLand (R, C) {
@@ -396,10 +391,6 @@ function isAttackLand (R, C) {
     emit('shoot');
 }
 
-function hoverState (R, C) {
-    console.log('hey', R, C);
-    // gridArray.value[R][C].state = 5;
-}
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
     return (cells.every(cell => cell.isHit));
