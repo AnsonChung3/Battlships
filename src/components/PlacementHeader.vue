@@ -59,8 +59,10 @@
 </template>
 
 <script setup>
-// tab
-// custom-q-btn
+import { ref } from 'vue';
+import CustomQBtn from 'src/components/CustomQBtn.vue';
+
+const tab = ref('auto');
 // isFullPlacement
 // shipsArray
 // shipSelect
@@ -69,7 +71,3 @@
 // clearPlacement
 // confirmPlacement
 </script>
-
-<style scoped>
-/* buttonRow */
-</style>
