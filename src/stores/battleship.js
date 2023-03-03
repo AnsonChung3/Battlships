@@ -1,4 +1,5 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useBattleshipStore = defineStore('battleship', () => {
     const p1GridArray = ref([])
@@ -22,5 +23,19 @@ export const useBattleshipStore = defineStore('battleship', () => {
         MARGIN: '13468C',
         HIT: '921313',
         MISS: '383232'
+    const shipsArray = ref([])
+
+    function generateShipsArray () {
+        shipsArray.value = shipLengths.map((len, index) => {
+            return {
+                len,
+                ID: index + 1,
+                isSet: false,
+                isSunk: false
+            };
+        });
     }
+
+    // }
+    return { shipsArray, generateShipsArray }
 })
