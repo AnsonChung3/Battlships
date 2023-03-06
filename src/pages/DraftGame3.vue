@@ -1,23 +1,21 @@
 <template>
     <div>
-        <div>
-            <div v-if="!confirm.p1" class="row">
-                <placement-header class="col" />
-                <div class="col"> <h2>!confirm.p1</h2> </div>
+        <div v-if="!confirm.p1" class="row">
+            <placement-header class="col" />
+            <div class="col"> <h2>!confirm.p1</h2> </div>
+        </div>
+        <div v-else-if="!confirm.p2" class="row">
+            <div class="col"> !confirm.p2 </div>
+            <placement-header class="col" />
+        </div>
+        <div v-else class="row">
+            <div class="col">
+                <attack-header/>
+                <attack-panel/>
             </div>
-            <div v-else-if="!confirm.p2" class="row">
-                <div class="col"> !confirm.p2 </div>
-                <placement-header class="col" />
-            </div>
-            <div v-else class="row">
-                <div class="col">
-                    <attack-header/>
-                    <attack-panel/>
-                </div>
-                <div class="col">
-                    <attack-header/>
-                    <attack-panel/>
-                </div>
+            <div class="col">
+                <attack-header/>
+                <attack-panel/>
             </div>
         </div>
     </div>
