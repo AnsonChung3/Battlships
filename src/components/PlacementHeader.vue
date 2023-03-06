@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, computed } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import PlacementPanel from 'components/PlacementPanel.vue';
 
@@ -75,6 +75,20 @@ const STATES = store.STATES;
 const gridWidth = store.gridWidth;
 
 const tab = ref('auto');
+watch(tab, (newtab) => {
+    clearPlacement();
+});
+
+function clearPlacement () {
+    gridArray.value.forEach(row => row.forEach(cell => {
+        cell.display = STATES.BLANK;
+        cell.placement = STATES.BLANK;
+    }));
+    shipsArray.value.forEach(ship => { ship.isSet = false });
+}
+
+const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
+
 const gridArray = ref(store.gridArray);
 const shipsArray = ref(store.shipsArray);
 function autoPlace () {
