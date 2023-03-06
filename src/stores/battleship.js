@@ -8,8 +8,8 @@ export const useBattleshipStore = defineStore('battleship', () => {
     // const p2GridArray = ref([])
     // const p2ShipsArray = ref([])
 
-    const gridWidth = 10
-    const gridArray = ref([])
+    const gridWidth = 10;
+    const gridArray = ref([]);
     function generateGrid () {
         gridArray.value = [];
         for (let R = 0; R < gridWidth; R++) {
@@ -28,8 +28,8 @@ export const useBattleshipStore = defineStore('battleship', () => {
         }
     }
 
-    const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1]
-    const shipsArray = ref([])
+    const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
+    const shipsArray = ref([]);
     function generateShipsArray () {
         shipsArray.value = shipLengths.map((len, index) => {
             return {
@@ -40,10 +40,6 @@ export const useBattleshipStore = defineStore('battleship', () => {
             };
         });
     }
-
-    function autoPlace () {
-        console.log('auto place');
-    }
     // these 2 enums can stay as is because they have no need for reactivity
     const STATES = {
         BLANK: 0,
@@ -51,13 +47,21 @@ export const useBattleshipStore = defineStore('battleship', () => {
         MARGIN: 2,
         HIT: 3,
         MISS: 4
-    }
+    };
     const COLORS = {
         BLANK: '948C15',
         PLACED: '1F9415',
         MARGIN: '13468C',
         HIT: '921313',
         MISS: '383232'
-    }
-    return { gridArray, generateGrid, shipsArray, generateShipsArray, autoPlace, STATES, COLORS }
-})
+    };
+    return {
+        gridArray,
+        generateGrid,
+        shipsArray,
+        generateShipsArray,
+        STATES,
+        COLORS,
+        gridWidth
+    };
+});
