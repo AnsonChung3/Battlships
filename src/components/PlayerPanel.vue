@@ -184,7 +184,7 @@ function clearPlacement () {
     generateShipsArray();
 }
 
-// placement and validation
+// do placement
 function doPlacement (R, C, shipLength, goRight, ID) {
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
@@ -264,6 +264,17 @@ function doPlacement (R, C, shipLength, goRight, ID) {
         }
     }
 }
+function colorShip (R, C, ID) {
+    gridArray.value[R][C].display = STATES.PLACED;
+    gridArray.value[R][C].placement = STATES.PLACED;
+    gridArray.value[R][C].ID = ID;
+}
+function colorMargin (R, C) {
+    gridArray.value[R][C].display = STATES.MARGIN;
+    gridArray.value[R][C].placement = STATES.MARGIN;
+}
+
+// placement validation
 function placeRightSuccess (R, C, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const col = C + len;
@@ -290,15 +301,7 @@ function placeDownSuccess (R, C, shipLength) {
     }
     return true;
 }
-function colorShip (R, C, ID) {
-    gridArray.value[R][C].display = STATES.PLACED;
-    gridArray.value[R][C].placement = STATES.PLACED;
-    gridArray.value[R][C].ID = ID;
-}
-function colorMargin (R, C) {
-    gridArray.value[R][C].display = STATES.MARGIN;
-    gridArray.value[R][C].placement = STATES.MARGIN;
-}
+
 
 // auto place all
 function autoPlace () {
