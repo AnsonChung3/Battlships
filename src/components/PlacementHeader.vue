@@ -97,6 +97,7 @@ function confirmPlacement () {
     p1Active.value = !p1Active.value;
 }
 
+// auto placement mode
 function autoPlace () {
     shipsArray.value.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);
@@ -145,6 +146,7 @@ function directionRight () {
     return (Math.random() < 0.5);
 }
 
+// shared method for both placement mode
 function doPlacement (R, C, shipLength, goRight, ID) {
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
@@ -251,4 +253,10 @@ function colorMargin (R, C) {
     gridArray.value[R][C].display = STATES.MARGIN;
     gridArray.value[R][C].placement = STATES.MARGIN;
 }
+
+// manual placement mode
+// some code should be in PlacementPanel
+// some of the shared logic may should go to store as well
+// as it may be called from 2 cpn
+
 </script>
