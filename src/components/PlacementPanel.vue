@@ -29,24 +29,25 @@
 
 <script setup>
 import { toRef, toRefs } from 'vue';
+
+import { useBattleshipStore } from 'stores/battleship.js';
+const store = useBattleshipStore();
+const STATES = store.STATES;
+const COLORS = store.COLORS;
+
+const p1Active = toRef(store, 'p1Active');
+const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
+const gridArray = player.grid;
+
 const props = defineProps({
     auto: Boolean
 });
 const auto = toRef(props, 'auto');
-import { useBattleshipStore } from 'stores/battleship.js';
-const store = useBattleshipStore();
-const p1Active = toRef(store, 'p1Active');
-const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
-console.log(`placement panel; ${player.player.value}`);
-const gridArray = player.grid;
 
-const STATES = store.STATES;
-const COLORS = store.COLORS;
-
-// function test () {
-//     return player.grid.value[0][0];
-// }
-
+// this function has the same name as the one in AttackPanel
+// because they were from the same function
+// keeping the same name 1. they are in different component
+// 2. no need to change template code
 function cellColor (R, C) {
     const cell = player.grid.value[R][C];
     if (cell.placement === STATES.PLACED) {
@@ -58,9 +59,4 @@ function cellColor (R, C) {
         return COLORS.BLANK;
     }
 }
-
-// gridArray
-// placementConfirmed
-// manualvalidation
-// cellColoe
 </script>

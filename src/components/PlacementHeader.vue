@@ -69,20 +69,21 @@ import PlacementPanel from 'components/PlacementPanel.vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
-const p1Active = toRef(store, 'p1Active');
 const STATES = store.STATES;
 const gridWidth = store.gridWidth;
+
+const p1Active = toRef(store, 'p1Active');
 const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
-console.log(`placement header; ${player.player.value}`);
 const gridArray = player.grid;
 const shipsArray = player.ships;
 
 const tab = ref('auto');
-// watcher not checked, leave for later
+// watcher seems working fine. Check if problem
 watch(tab, (newtab) => {
     clearPlacement();
 });
 
+const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
 function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => {
         cell.display = STATES.BLANK;
@@ -91,16 +92,8 @@ function clearPlacement () {
     }));
     shipsArray.value.forEach(ship => { ship.isSet = false; });
 }
-
-const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
-
 function confirmPlacement () {
     player.placementConfirmed.value = true;
-    if (p1Active.value) {
-        console.log('p1 confirm placement');
-    } else {
-        console.log('p2 confirm placement');
-    }
     p1Active.value = !p1Active.value;
 }
 
@@ -158,26 +151,22 @@ function doPlacement (R, C, shipLength, goRight, ID) {
             colorShip(R, C + i, ID);
             // color left/right end of ship once
             if (i === 0) {
-                // left end
+                // left end, top, bottm
                 if (C >= 1) {
                     colorMargin(R, C - 1);
-                    // left top
                     if (R >= 1) {
                         colorMargin(R - 1, C - 1);
                     }
-                    // left bttom
                     if (R + 1 < gridWidth) {
                         colorMargin(R + 1, C - 1);
                     }
                 }
-                // right end
+                // right end, top, bottm
                 if (C + shipLength < gridWidth) {
                     colorMargin(R, C + shipLength);
-                    // right top
                     if (R >= 1) {
                         colorMargin(R - 1, C + shipLength);
                     }
-                    // right bottom
                     if (R + 1 < gridWidth) {
                         colorMargin(R + 1, C + shipLength);
                     }
@@ -195,26 +184,22 @@ function doPlacement (R, C, shipLength, goRight, ID) {
             colorShip(R + i, C, ID);
             // color top/bottom ends once
             if (i === 0) {
-                // top end
+                // top end, left, right
                 if (R >= 1) {
                     colorMargin(R - 1, C);
-                    // top left
                     if (C >= 1) {
                         colorMargin(R - 1, C - 1);
                     }
-                    // top right
                     if (C + 1 < gridWidth) {
                         colorMargin(R - 1, C + 1);
                     }
                 }
-                // bottom end
+                // bottom end, left, right
                 if (R + shipLength < gridWidth) {
                     colorMargin(R + shipLength, C);
-                    // bottom left
                     if (C >= 1) {
                         colorMargin(R + shipLength, C - 1);
                     }
-                    // bottom right
                     if (C + 1 < gridWidth) {
                         colorMargin(R + shipLength, C + 1);
                     }
@@ -266,14 +251,4 @@ function colorMargin (R, C) {
     gridArray.value[R][C].display = STATES.MARGIN;
     gridArray.value[R][C].placement = STATES.MARGIN;
 }
-
-// isFullPlacement
-
-// clearPlacement
-// confirmPlacement
-
-// shipsArray
-// shipSelect
-// manualDirectionDisplay
-// rotate
 </script>

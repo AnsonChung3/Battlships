@@ -16,18 +16,16 @@
 </template>
 
 <script setup>
-// shipsArray
 import { toRefs, toRef } from 'vue';
-import { useBattleshipStore } from 'stores/battleship.js';
 import ProgressQBtn from 'src/components/ProgressQBtn.vue';
 
-const store = useBattleshipStore();
 const props = defineProps({
     p1: Boolean
 });
 const p1 = toRef(props, 'p1');
-const player = (p1.value === true) ? toRefs(store.p1) : toRefs(store.p2);
-console.log(`attack header; ${player.player.value}`);
-const shipsArray = player.ships;
 
+import { useBattleshipStore } from 'stores/battleship.js';
+const store = useBattleshipStore();
+const player = (p1.value === true) ? toRefs(store.p1) : toRefs(store.p2);
+const shipsArray = player.ships;
 </script>

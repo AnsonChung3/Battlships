@@ -4,6 +4,8 @@ import { ref, reactive } from 'vue';
 export const useBattleshipStore = defineStore('battleship', () => {
     const p1Active = ref(true);
     const p1 = reactive({
+        // player property is added for debgging
+        // can be removed when whole project is complete
         player: 1,
         placementConfirmed: false,
         grid: [],
@@ -18,6 +20,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
 
     const gridWidth = 10;
     const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
+
     function generateGrid (player) {
         player.grid = [];
         for (let R = 0; R < gridWidth; R++) {
@@ -25,6 +28,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
             for (let C = 0; C < gridWidth; C++) {
                 rowArray.push({
                     // coordinate is only for debugging
+                    // can be removed when whole project is complete
                     coordinate: `row ${R}, column ${C}`,
                     display: STATES.BLANK,
                     placement: STATES.BLANK,
@@ -51,7 +55,8 @@ export const useBattleshipStore = defineStore('battleship', () => {
         generateGrid(p1);
         generateGrid(p2);
     }
-    // these 2 enums can stay as is because they have no need for reactivity
+
+    // these 2 enums have no need for reactivity
     const STATES = {
         BLANK: 0,
         PLACED: 1,

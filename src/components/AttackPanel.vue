@@ -35,19 +35,17 @@ import { toRef, toRefs, computed } from 'vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
-const p1Active = toRef(store, 'p1Active');
 const STATES = store.STATES;
 const COLORS = store.COLORS;
 
+const p1Active = toRef(store, 'p1Active');
 const props = defineProps({
     p1: Boolean
 });
 const p1 = toRef(props, 'p1');
-console.log(`p1 value for attack panel ${p1.value}`);
 const homePanel = computed(() => { return (p1.value === p1Active.value) });
 
 const player = p1.value ? toRefs(store.p1) : toRefs(store.p2);
-console.log(`attack panel; ${player.player.value}`);
 const gridArray = player.grid;
 const shipsArray = player.ships;
 
@@ -78,7 +76,7 @@ function cellColor (R, C) {
     }
 }
 
-// dependent methods for isAttackLand: isDestroyed, isEnd
+// isAttackLand can have further checks
 function isAttackLand (R, C) {
     const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
@@ -94,10 +92,9 @@ function isAttackLand (R, C) {
 //     no need to emit anymore? as it can take turn by changing p1Active from anywhere
 //     emit('shoot');
 }
-
+// isDestroyed seems to be fine. Check if problem
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
     return (cells.every(cell => cell.isHit));
 }
-
 </script>

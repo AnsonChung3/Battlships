@@ -2,10 +2,12 @@
     <div>
         <q-btn
             label="toggle p1 active"
-            @click="store.p1Active = !store.p1Active"
+            @click="store.p1Active=!store.p1Active"
         />
         <div v-if="!p1.placementConfirmed" class="row">
+            <!-- question: does placement panel need to be here for consistency? -->
             <placement-header class="col" />
+            <!-- note: h2 here needs to change to computed msg -->
             <div class="col"> <h2>!confirm.p1</h2> </div>
         </div>
         <div v-else-if="!p2.placementConfirmed" class="row">
@@ -26,11 +28,10 @@
 </template>
 
 <script setup>
+import { toRef } from 'vue';
 import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
-
-import { toRef } from 'vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
@@ -40,6 +41,7 @@ store.initGame();
 const p1 = toRef(store, 'p1');
 const p2 = toRef(store, 'p2');
 const isPlayerOne = true;
+
 </script>
 
 <style>
