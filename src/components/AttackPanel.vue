@@ -50,7 +50,7 @@ const shipsArray = player.ships;
 
 function cellColor (R, C) {
     const cell = gridArray.value[R][C];
-    if (homePanel.value === true) {
+    if (homePanel.value) {
         if (cell.placement === STATES.PLACED) {
             if (cell.isHit) {
                 return COLORS.HIT;
