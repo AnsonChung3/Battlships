@@ -37,6 +37,7 @@ import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
 const p1Active = toRef(store, 'p1Active');
 const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
+console.log(`placement panel; ${player.player.value}`);
 const gridArray = player.grid;
 
 const STATES = store.STATES;

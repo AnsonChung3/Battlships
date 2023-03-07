@@ -1,5 +1,9 @@
 <template>
     <div>
+        <q-btn
+            label="toggle p1 active"
+            @click="store.p1Active = !store.p1Active"
+        />
         <div v-if="!p1.placementConfirmed" class="row">
             <placement-header class="col" />
             <div class="col"> <h2>!confirm.p1</h2> </div>
@@ -10,12 +14,12 @@
         </div>
         <div v-else class="row">
             <div class="col">
-                <attack-header p1=true />
-                <attack-panel :p1=true />
+                <attack-header :p1=isPlayerOne />
+                <attack-panel :p1=isPlayerOne />
             </div>
             <div class="col">
-                <attack-header :p1=false />
-                <attack-panel :p1=false />
+                <attack-header :p1=!isPlayerOne />
+                <attack-panel :p1=!isPlayerOne />
             </div>
         </div>
     </div>
@@ -26,27 +30,16 @@ import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
 
-import { toRef, toRefs } from 'vue';
+import { toRef } from 'vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
 store.initGame();
-// not using fat arrow here may lead to problems...
-// function onMounted () {
-//     store.initGame();
-// };
 
-const p1Active = toRef(store, 'p1Active');
 // question: I thought I should use toRefs, but appearant that give me error?
 const p1 = toRef(store, 'p1');
 const p2 = toRef(store, 'p2');
-const testP1 = toRefs(store.p1);
-function test () {
-    testP1.ships.value.forEach(ship => console.log(`ship id is ${ship.ID}`));
-    testP1.ships.value.forEach(ship => ship.ID++);
-    // console.log(testP1.ships.value[0]);
-}
-
+const isPlayerOne = true;
 </script>
 
 <style>

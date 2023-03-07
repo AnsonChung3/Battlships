@@ -73,6 +73,7 @@ const p1Active = toRef(store, 'p1Active');
 const STATES = store.STATES;
 const gridWidth = store.gridWidth;
 const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
+console.log(`placement header; ${player.player.value}`);
 const gridArray = player.grid;
 const shipsArray = player.ships;
 

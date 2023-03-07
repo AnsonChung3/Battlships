@@ -1,10 +1,12 @@
 <template>
     <div>
+        <div><h2>{{ homePanel }}</h2></div>
         <!-- game panel is created once both players have confirmed placement
         would be on at all times, except showing different info
         for when it's showing as home/opponent panel -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
+                <!-- v-if logic can potentially change to v-show -->
                 <div
                     v-if="homePanel"
                     class="cell"
@@ -40,9 +42,12 @@ const COLORS = store.COLORS;
 const props = defineProps({
     p1: Boolean
 });
-const homePanel = computed(() => { return (props.p1.value && p1Active.value) });
+const p1 = toRef(props, 'p1');
+console.log(`p1 value for attack panel ${p1.value}`);
+const homePanel = computed(() => { return (p1.value === p1Active.value) });
 
-const player = props.p1.value ? toRefs(store.p1) : toRefs(store.p2);
+const player = p1.value ? toRefs(store.p1) : toRefs(store.p2);
+console.log(`attack panel; ${player.player.value}`);
 const gridArray = player.grid;
 const shipsArray = player.ships;
 
