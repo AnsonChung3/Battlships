@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div><h2>{{ homePanel }}</h2></div>
         <!-- game panel is created once both players have confirmed placement
         would be on at all times, except showing different info
         for when it's showing as home/opponent panel -->
