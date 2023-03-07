@@ -43,7 +43,7 @@ const props = defineProps({
     p1: Boolean
 });
 const p1 = toRef(props, 'p1');
-const homePanel = computed(() => { return (p1.value === p1Active.value) });
+const homePanel = computed(() => { return (p1.value === p1Active.value); });
 
 const player = p1.value ? toRefs(store.p1) : toRefs(store.p2);
 const gridArray = player.grid;
