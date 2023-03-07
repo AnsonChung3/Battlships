@@ -29,22 +29,22 @@
 </template>
 
 <script setup>
-import { toRef } from 'vue';
+import { toRef, toRefs, computed } from 'vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
-const shipsArray = store.shipsArray;
+const p1Active = toRef(store, 'p1Active');
 const STATES = store.STATES;
 const COLORS = store.COLORS;
 
-// gridArray should later be modded to another prop?
-const gridArray = toRef(store, 'gridArray');
-
-// homePanel needs to be props
 const props = defineProps({
-    home: Boolean
+    p1: Boolean
 });
-const homePanel = toRef(props, 'home');
+const homePanel = computed(() => { return (props.p1.value && p1Active.value) });
+
+const player = props.p1.value ? toRefs(store.p1) : toRefs(store.p2);
+const gridArray = player.grid;
+const shipsArray = player.ships;
 
 function cellColor (R, C) {
     const cell = gridArray.value[R][C];

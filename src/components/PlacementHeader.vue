@@ -4,7 +4,7 @@
             <q-tabs
                 v-model="tab"
                 active-color="bg-negative"
-                class="bg-primary text-secondary"
+                class="bg-1imary text-secondary"
                 dense
             >
                 <q-tab name="auto"     label="Auto"/>
@@ -58,23 +58,26 @@
         </div>
         <placement-panel
             :auto="tab==='auto'"
-            :gridArray=gridArray
         />
     </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, toRef, toRefs } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import PlacementPanel from 'components/PlacementPanel.vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
+const p1Active = toRef(store, 'p1Active');
 const STATES = store.STATES;
-// const COLORS = store.COLORS;
 const gridWidth = store.gridWidth;
+const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
+const gridArray = player.grid;
+const shipsArray = player.ships;
 
 const tab = ref('auto');
+// watcher not checked, leave for later
 watch(tab, (newtab) => {
     clearPlacement();
 });
@@ -83,14 +86,23 @@ function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => {
         cell.display = STATES.BLANK;
         cell.placement = STATES.BLANK;
+        cell.ID = 0;
     }));
-    shipsArray.value.forEach(ship => { ship.isSet = false });
+    shipsArray.value.forEach(ship => { ship.isSet = false; });
 }
 
 const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
 
-const gridArray = ref(store.gridArray);
-const shipsArray = ref(store.shipsArray);
+function confirmPlacement () {
+    player.placementConfirmed.value = true;
+    if (p1Active.value) {
+        console.log('p1 confirm placement');
+    } else {
+        console.log('p2 confirm placement');
+    }
+    p1Active.value = !p1Active.value;
+}
+
 function autoPlace () {
     shipsArray.value.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);

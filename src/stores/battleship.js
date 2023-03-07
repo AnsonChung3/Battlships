@@ -1,17 +1,25 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
 export const useBattleshipStore = defineStore('battleship', () => {
-    // const p1GridArray = ref([])
-    // const p1ShipsArray = ref([])
-
-    // const p2GridArray = ref([])
-    // const p2ShipsArray = ref([])
+    const p1Active = ref(true);
+    const p1 = reactive({
+        player: 1,
+        placementConfirmed: false,
+        grid: [],
+        ships: []
+    });
+    const p2 = reactive({
+        player: 2,
+        placementConfirmed: false,
+        grid: [],
+        ships: []
+    });
 
     const gridWidth = 10;
-    const gridArray = ref([]);
-    function generateGrid () {
-        gridArray.value = [];
+    const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
+    function generateGrid (player) {
+        player.grid = [];
         for (let R = 0; R < gridWidth; R++) {
             const rowArray = [];
             for (let C = 0; C < gridWidth; C++) {
@@ -24,14 +32,11 @@ export const useBattleshipStore = defineStore('battleship', () => {
                     isHit: false
                 });
             }
-            gridArray.value.push(rowArray);
+            player.grid.push(rowArray);
         }
     }
-
-    const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
-    const shipsArray = ref([]);
-    function generateShipsArray () {
-        shipsArray.value = shipLengths.map((len, index) => {
+    function generateShips (player) {
+        player.ships = shipLengths.map((len, index) => {
             return {
                 len,
                 ID: index + 1,
@@ -39,6 +44,12 @@ export const useBattleshipStore = defineStore('battleship', () => {
                 isSunk: false
             };
         });
+    }
+    function initGame () {
+        generateShips(p1);
+        generateShips(p2);
+        generateGrid(p1);
+        generateGrid(p2);
     }
     // these 2 enums can stay as is because they have no need for reactivity
     const STATES = {
@@ -55,13 +66,14 @@ export const useBattleshipStore = defineStore('battleship', () => {
         HIT: '921313',
         MISS: '383232'
     };
+
     return {
-        gridArray,
-        generateGrid,
-        shipsArray,
-        generateShipsArray,
+        p1Active,
+        p1,
+        p2,
+        gridWidth,
+        initGame,
         STATES,
-        COLORS,
-        gridWidth
+        COLORS
     };
 });

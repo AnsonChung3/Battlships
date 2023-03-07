@@ -28,20 +28,26 @@
 </template>
 
 <script setup>
-import { toRef } from 'vue';
+import { toRef, toRefs } from 'vue';
 const props = defineProps({
-    auto: Boolean,
-    gridArray: Array
+    auto: Boolean
 });
 const auto = toRef(props, 'auto');
-const gridArray = toRef(props, 'gridArray');
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
+const p1Active = toRef(store, 'p1Active');
+const player = p1Active.value ? toRefs(store.p1) : toRefs(store.p2);
+const gridArray = player.grid;
+
 const STATES = store.STATES;
 const COLORS = store.COLORS;
 
+// function test () {
+//     return player.grid.value[0][0];
+// }
+
 function cellColor (R, C) {
-    const cell = gridArray.value[R][C];
+    const cell = player.grid.value[R][C];
     if (cell.placement === STATES.PLACED) {
         return COLORS.HIT;
     }
@@ -51,6 +57,7 @@ function cellColor (R, C) {
         return COLORS.BLANK;
     }
 }
+
 // gridArray
 // placementConfirmed
 // manualvalidation

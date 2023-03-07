@@ -17,12 +17,15 @@
 
 <script setup>
 // shipsArray
-import { toRef } from 'vue';
+import { toRefs } from 'vue';
 import { useBattleshipStore } from 'stores/battleship.js';
 import ProgressQBtn from 'src/components/ProgressQBtn.vue';
 
 const store = useBattleshipStore();
-store.generateShipsArray();
-const shipsArray = toRef(store, 'shipsArray');
+const props = defineProps({
+    p1: Boolean
+});
+const player = props.p1.value ? toRefs(store.p1) : toRefs(store.p2);
+const shipsArray = player.ships;
 
 </script>
