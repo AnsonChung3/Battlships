@@ -56,16 +56,16 @@
                 label="Confirm Placement"
             />
         </div>
-        <placement-panel
-            :auto="tab==='auto'"
-        />
+        <placement-auto v-if="tab==='auto'"/>
+        <prop-page v-else/>
     </div>
 </template>
 
 <script setup>
 import { ref, watch, computed, toRef, toRefs } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
-import PlacementPanel from 'components/PlacementPanel.vue';
+import PlacementAuto from 'components/PlacementAuto.vue';
+import PropPage from 'pages/PropPage.vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
