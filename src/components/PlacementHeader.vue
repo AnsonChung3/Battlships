@@ -66,6 +66,7 @@ import { ref, watch, computed, toRef, toRefs } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import PlacementAuto from 'components/PlacementAuto.vue';
 import PropPage from 'pages/PropPage.vue';
+import { doPlacement, placeRightSuccess, placeDownSuccess } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
@@ -145,118 +146,5 @@ function directionRight () {
     // rnd when right and down are both viable
     return (Math.random() < 0.5);
 }
-
-// shared method for both placement mode
-function doPlacement (R, C, shipLength, goRight, ID) {
-    for (let i = 0; i < shipLength; i++) {
-        if (goRight) {
-            colorShip(R, C + i, ID);
-            // color left/right end of ship once
-            if (i === 0) {
-                // left end, top, bottm
-                if (C >= 1) {
-                    colorMargin(R, C - 1);
-                    if (R >= 1) {
-                        colorMargin(R - 1, C - 1);
-                    }
-                    if (R + 1 < gridWidth) {
-                        colorMargin(R + 1, C - 1);
-                    }
-                }
-                // right end, top, bottm
-                if (C + shipLength < gridWidth) {
-                    colorMargin(R, C + shipLength);
-                    if (R >= 1) {
-                        colorMargin(R - 1, C + shipLength);
-                    }
-                    if (R + 1 < gridWidth) {
-                        colorMargin(R + 1, C + shipLength);
-                    }
-                }
-            }
-            // if the row above exist, color cell above
-            if (R >= 1) {
-                colorMargin(R - 1, C + i);
-            }
-            // if bottom row existm coloe cell below
-            if (R + 1 < gridWidth) {
-                colorMargin(R + 1, C + i);
-            }
-        } else {
-            colorShip(R + i, C, ID);
-            // color top/bottom ends once
-            if (i === 0) {
-                // top end, left, right
-                if (R >= 1) {
-                    colorMargin(R - 1, C);
-                    if (C >= 1) {
-                        colorMargin(R - 1, C - 1);
-                    }
-                    if (C + 1 < gridWidth) {
-                        colorMargin(R - 1, C + 1);
-                    }
-                }
-                // bottom end, left, right
-                if (R + shipLength < gridWidth) {
-                    colorMargin(R + shipLength, C);
-                    if (C >= 1) {
-                        colorMargin(R + shipLength, C - 1);
-                    }
-                    if (C + 1 < gridWidth) {
-                        colorMargin(R + shipLength, C + 1);
-                    }
-                }
-            }
-            // left col
-            if (C >= 1) {
-                colorMargin(R + i, C - 1);
-            }
-            // right col
-            if (C + 1 < gridWidth) {
-                colorMargin(R + i, C + 1);
-            }
-        }
-    }
-}
-function placeRightSuccess (R, C, shipLength) {
-    for (let len = 1; len < shipLength; len++) {
-        const col = C + len;
-        if (col >= gridWidth) {
-            return false;
-        }
-        const cell = gridArray.value[R][col];
-        if (cell.placement !== STATES.BLANK) {
-            return false;
-        }
-    }
-    return true;
-}
-function placeDownSuccess (R, C, shipLength) {
-    for (let len = 1; len < shipLength; len++) {
-        const row = R + len;
-        if (row >= gridWidth) {
-            return false;
-        }
-        const cell = gridArray.value[row][C];
-        if (cell.placement !== STATES.BLANK) {
-            return false;
-        }
-    }
-    return true;
-}
-function colorShip (R, C, ID) {
-    gridArray.value[R][C].display = STATES.PLACED;
-    gridArray.value[R][C].placement = STATES.PLACED;
-    gridArray.value[R][C].ID = ID;
-}
-function colorMargin (R, C) {
-    gridArray.value[R][C].display = STATES.MARGIN;
-    gridArray.value[R][C].placement = STATES.MARGIN;
-}
-
-// manual placement mode
-// some code should be in PlacementPanel
-// some of the shared logic may should go to store as well
-// as it may be called from 2 cpn
 
 </script>
