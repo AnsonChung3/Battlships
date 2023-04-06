@@ -2,13 +2,6 @@ import { defineStore } from 'pinia';
 import { ref, reactive } from 'vue';
 
 export const useBattleshipStore = defineStore('battleship', () => {
-    const testVal = ref(5);
-    const testObj = reactive({
-        propNum: 1,
-        propString: 'test',
-        propArray: [[1, 2, 3], [4, 5, 6]],
-        propBoolean: true
-    });
     const p1Active = ref(true);
     const p1 = reactive({
         // player property is added for debgging
@@ -80,8 +73,6 @@ export const useBattleshipStore = defineStore('battleship', () => {
     };
 
     return {
-        testObj,
-        testVal,
         p1Active,
         p1,
         p2,
