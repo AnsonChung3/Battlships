@@ -86,17 +86,12 @@ function isAttackLand (R, C) {
         const isEnd = shipsArray.value.every(ship => ship.isSunk);
         if (isEnd) {
             console.log(`emit end from ${props.player}`);
-            // emit('game-end');
         }
     }
-    // setTimeout(nextTurn, 1000);
-    // store.p1Active = !store.p1Active;
     setTimeout(() => {
         nextTurn();
         store.p1Active = !store.p1Active;
     }, 1000);
-//     no need to emit anymore? as it can take turn by changing p1Active from anywhere
-//     emit('shoot');
 }
 // isDestroyed seems to be fine. Check if problem
 function isDestroyed (ID) {
