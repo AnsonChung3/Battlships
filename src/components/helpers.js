@@ -4,6 +4,11 @@ const STATES = store.STATES;
 const WIDTH = store.gridWidth;
 let activePlayer = store.p1Active ? store.p1 : store.p2;
 
+// manual placement mode
+export function resetSelectedID () {
+    store.manualSelectID = 999;
+};
+
 // auto placement mode
 export function autoPlace () {
     // active player needs to be refreshed at the beginning of the placement

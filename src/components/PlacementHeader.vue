@@ -37,7 +37,7 @@
                             Click to rotate:
                             <custom-q-btn
                                 @click="rotate"
-                                :label=manualDirectionDisplay
+                                :label=directionDisplay
                                 class="buttonRow"
                             />
                         </p>
@@ -66,7 +66,7 @@ import { ref, watch, computed, toRef, toRefs } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import PlacementAuto from 'components/PlacementAuto.vue';
 import PropPage from 'pages/PropPage.vue';
-import { autoPlace } from 'components/helpers.js';
+import { autoPlace, resetSelectedID } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
@@ -83,6 +83,14 @@ watch(tab, (newtab) => {
     clearPlacement();
 });
 
+const directionDisplay = computed(() => store.manualGoRight ? 'Right' : 'Down');
+function rotate () {
+    store.manualGoRight = !store.manualGoRight;
+};
+function shipSelect (ID) {
+    store.manualSelectID = ID;
+};
+
 const isFullPlacement = computed(() => shipsArray.value.every((ship) => ship.isSet));
 function clearPlacement () {
     gridArray.value.forEach(row => row.forEach(cell => {
@@ -91,9 +99,11 @@ function clearPlacement () {
         cell.ID = 0;
     }));
     shipsArray.value.forEach(ship => { ship.isSet = false; });
+    resetSelectedID();
 }
 function confirmPlacement () {
     player.placementConfirmed.value = true;
     p1Active.value = !p1Active.value;
+    resetSelectedID();
 }
 </script>

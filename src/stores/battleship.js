@@ -72,6 +72,9 @@ export const useBattleshipStore = defineStore('battleship', () => {
         MISS: '383232'
     };
 
+    const manualGoRight = ref(true);
+    const manualSelectID = ref(999);
+
     return {
         p1Active,
         p1,
@@ -79,6 +82,8 @@ export const useBattleshipStore = defineStore('battleship', () => {
         gridWidth,
         initGame,
         STATES,
-        COLORS
+        COLORS,
+        manualSelectID,
+        manualGoRight
     };
 });
