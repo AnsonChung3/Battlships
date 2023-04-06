@@ -4,7 +4,59 @@ const STATES = store.STATES;
 const WIDTH = store.gridWidth;
 const activePlayer = store.p1Active ? store.p1 : store.p2;
 
-export function doPlacement (R, C, shipLength, goRight, ID) {
+// auto placement mode
+export function autoPlace () {
+    activePlayer.ships.forEach((ship) => {
+        shipPlacement(ship.len, ship.ID);
+        ship.isSet = true;
+    });
+}
+function shipPlacement (shipLength, ID) {
+    // e.g. startCell = {R: 1, C: 2}
+    const startCell = getRndStart(shipLength);
+    const R = startCell.R;
+    const C = startCell.C;
+    if (shipLength === 1) {
+        doPlacement(R, C, shipLength, true, ID);
+        return;
+    }
+    const right = placeRightSuccess(R, C, shipLength);
+    const down = placeDownSuccess(R, C, shipLength);
+    const goRight = !right ? false : (right && down) ? directionRight() : true;
+    // let goRight = true;
+    // if (!right) {
+    //     goRight = false;
+    // } else if (right && down) {
+    //     goRight = directionRight();
+    // }
+    doPlacement(R, C, shipLength, goRight, ID);
+}
+function getRndStart (shipLength) {
+    console.log(shipLength, WIDTH);
+    const maxStartArea = WIDTH - shipLength;
+    let R = getRandom(WIDTH);
+    let C = getRandom(WIDTH);
+    let rndCell = activePlayer.grid[R][C];
+
+    // while (cell is unavailable OR can be placed in neither direction) is true
+    // {get a new random start}
+    while (rndCell.placement !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
+        R = getRandom(WIDTH);
+        C = getRandom(WIDTH);
+        rndCell = activePlayer.grid[R][C];
+    }
+    return { R, C };
+}
+function getRandom (max) {
+    return Math.floor(Math.random() * max);
+}
+function directionRight () {
+    // rnd when right and down are both viable
+    return (Math.random() < 0.5);
+}
+
+// placement method for both Auto and Manual
+function doPlacement (R, C, shipLength, goRight, ID) {
     for (let i = 0; i < shipLength; i++) {
         if (goRight) {
             colorShip(R, C + i, ID);
@@ -75,7 +127,7 @@ export function doPlacement (R, C, shipLength, goRight, ID) {
         }
     }
 }
-export function placeRightSuccess (R, C, shipLength) {
+function placeRightSuccess (R, C, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const col = C + len;
         if (col >= WIDTH) {
@@ -88,7 +140,7 @@ export function placeRightSuccess (R, C, shipLength) {
     }
     return true;
 }
-export function placeDownSuccess (R, C, shipLength) {
+function placeDownSuccess (R, C, shipLength) {
     for (let len = 1; len < shipLength; len++) {
         const row = R + len;
         if (row >= WIDTH) {
