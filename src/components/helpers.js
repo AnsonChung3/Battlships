@@ -9,6 +9,24 @@ export function resetSelectedID () {
     store.manualSelectID = 999;
 };
 
+export function manualPlace (R, C) {
+    activePlayer = store.p1Active ? store.p1 : store.p2;
+    const ID = store.manualSelectID;
+    const goRight = store.manualGoRight;
+    if (ID === 999) {
+        alert('no ship is selected');
+        return;
+    }
+    const len = activePlayer.ships[ID - 1].len;
+    if ((goRight && placeRightSuccess(R, C, len)) || (!goRight && placeDownSuccess(R, C, len))) {
+        doPlacement(R, C, len, goRight, ID);
+        activePlayer.ships[ID - 1].isSet = true;
+        resetSelectedID();
+    } else {
+        alert('Not enough room!');
+    }
+}
+
 // auto placement mode
 export function autoPlace () {
     // active player needs to be refreshed at the beginning of the placement

@@ -57,7 +57,7 @@
             />
         </div>
         <placement-auto v-if="tab==='auto'"/>
-        <prop-page v-else/>
+        <placement-manual v-else/>
     </div>
 </template>
 
@@ -65,7 +65,7 @@
 import { ref, watch, computed, toRef, toRefs } from 'vue';
 import CustomQBtn from 'src/components/CustomQBtn.vue';
 import PlacementAuto from 'components/PlacementAuto.vue';
-import PropPage from 'pages/PropPage.vue';
+import PlacementManual from 'components/PlacementManual.vue';
 import { autoPlace, resetSelectedID } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
