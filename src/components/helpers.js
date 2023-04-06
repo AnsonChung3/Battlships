@@ -34,7 +34,6 @@ function shipPlacement (shipLength, ID) {
     doPlacement(R, C, shipLength, goRight, ID);
 }
 function getRndStart (shipLength) {
-    console.log(shipLength, WIDTH);
     const maxStartArea = WIDTH - shipLength;
     let R = getRandom(WIDTH);
     let C = getRandom(WIDTH);
