@@ -2,10 +2,12 @@ import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
 const STATES = store.STATES;
 const WIDTH = store.gridWidth;
-const activePlayer = store.p1Active ? store.p1 : store.p2;
+let activePlayer = store.p1Active ? store.p1 : store.p2;
 
 // auto placement mode
 export function autoPlace () {
+    // active player needs to be refreshed at the beginning of the placement
+    activePlayer = store.p1Active ? store.p1 : store.p2;
     activePlayer.ships.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);
         ship.isSet = true;
