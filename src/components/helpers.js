@@ -4,6 +4,11 @@ const STATES = store.STATES;
 const WIDTH = store.gridWidth;
 let activePlayer = store.p1Active ? store.p1 : store.p2;
 
+// game play
+export function nextTurn () {
+    store.turnInterval = !store.turnInterval;
+};
+
 // manual placement mode
 export function resetSelectedID () {
     store.manualSelectID = 999;

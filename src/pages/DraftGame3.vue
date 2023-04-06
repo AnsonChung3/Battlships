@@ -4,34 +4,48 @@
             label="toggle p1 active"
             @click="store.p1Active=!store.p1Active"
         />
-        <div v-if="!p1.placementConfirmed" class="row">
-            <!-- question: does placement panel need to be here for consistency? -->
-            <placement-header class="col" />
-            <!-- note: h2 here needs to change to computed msg -->
-            <div class="col"> <h2>!confirm.p1</h2> </div>
+        <q-btn
+            label="turn interval"
+            @click="interval"
+        />
+        <div v-show="store.turnInterval">
+            <h1>{{ turnPlayer }} ready?</h1>
+            <q-btn
+                label="next turn"
+                @click="nextTurn"
+            />
         </div>
-        <div v-else-if="!p2.placementConfirmed" class="row">
-            <div class="col"> <h2>!confirm.p2</h2> </div>
-            <placement-header class="col" />
-        </div>
-        <div v-else class="row">
-            <div class="col">
-                <attack-header :p1=isPlayerOne />
-                <attack-panel :p1=isPlayerOne />
+        <div v-show="!store.turnInterval">
+            <div v-if="!p1.placementConfirmed" class="row">
+                <!-- question: does placement panel need to be here for consistency? -->
+                <placement-header class="col" />
+                <!-- note: h2 here needs to change to computed msg -->
+                <div class="col"> <h2>Player 1 please choose fleet placement</h2> </div>
             </div>
-            <div class="col">
-                <attack-header :p1=!isPlayerOne />
-                <attack-panel :p1=!isPlayerOne />
+            <div v-else-if="!p2.placementConfirmed" class="row">
+                <div class="col"> <h2>Player 2 please choose fleet placement</h2> </div>
+                <placement-header class="col" />
+            </div>
+            <div v-else class="row">
+                <div class="col">
+                    <attack-header :p1=isPlayerOne />
+                    <attack-panel :p1=isPlayerOne />
+                </div>
+                <div class="col">
+                    <attack-header :p1=!isPlayerOne />
+                    <attack-panel :p1=!isPlayerOne />
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { toRef } from 'vue';
+import { toRef, computed } from 'vue';
 import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
+import { nextTurn } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
@@ -41,6 +55,7 @@ store.initGame();
 const p1 = toRef(store, 'p1');
 const p2 = toRef(store, 'p2');
 const isPlayerOne = true;
+const turnPlayer = computed(() => store.p1Active ? 'Player 1' : 'Player 2');
 
 </script>
 

@@ -31,6 +31,7 @@
 
 <script setup>
 import { toRef, toRefs, computed } from 'vue';
+import { nextTurn } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
@@ -88,6 +89,12 @@ function isAttackLand (R, C) {
             // emit('game-end');
         }
     }
+    // setTimeout(nextTurn, 1000);
+    // store.p1Active = !store.p1Active;
+    setTimeout(() => {
+        nextTurn();
+        store.p1Active = !store.p1Active;
+    }, 1000);
 //     no need to emit anymore? as it can take turn by changing p1Active from anywhere
 //     emit('shoot');
 }
