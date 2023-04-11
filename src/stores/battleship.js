@@ -75,6 +75,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
     const manualGoRight = ref(true);
     const manualSelectID = ref(999);
 
+    const gameEnd = ref(false);
     const turnInterval = ref(false);
 
     return {
@@ -87,6 +88,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
         COLORS,
         manualSelectID,
         manualGoRight,
+        gameEnd,
         turnInterval
     };
 });

@@ -4,6 +4,22 @@
             label="toggle p1 active"
             @click="store.p1Active=!store.p1Active"
         />
+        <q-btn
+            label="toggle game end"
+            @click="store.gameEnd=!store.gameEnd"
+        />
+        <div class="GameEndModal">
+            <q-dialog v-model="store.gameEnd" persistent="">
+                <q-card class="bg-info text-secondary">
+                    <q-card-section>
+                        <h1>Game End!</h1>
+                    </q-card-section>
+                    <q-card-actions align="center">
+                        <q-btn label="start new" v-close-popup outline/>
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
+        </div>
         <div v-show="store.turnInterval">
             <h1>{{ turnPlayer }} ready?</h1>
             <q-btn
