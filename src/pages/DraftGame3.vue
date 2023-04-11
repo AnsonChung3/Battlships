@@ -4,10 +4,6 @@
             label="toggle p1 active"
             @click="store.p1Active=!store.p1Active"
         />
-        <q-btn
-            label="turn interval"
-            @click="interval"
-        />
         <div v-show="store.turnInterval">
             <h1>{{ turnPlayer }} ready?</h1>
             <q-btn
