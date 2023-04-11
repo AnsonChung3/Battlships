@@ -80,11 +80,11 @@ const isAttackAbled = ref(true);
 
 // isAttackLand can have further checks
 function isAttackLand (R, C) {
-    if (!isAttackAbled.value) {
+    const checkCell = gridArray.value[R][C];
+    if (!isAttackAbled.value || checkCell.isHit) {
         return;
     }
     isAttackAbled.value = !isAttackAbled.value;
-    const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
     if (checkCell.placement === STATES.PLACED && isDestroyed(checkCell.ID)) {
         shipsArray.value[checkCell.ID - 1].isSunk = true;
