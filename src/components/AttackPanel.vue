@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { toRef, toRefs, computed } from 'vue';
+import { ref, toRef, toRefs, computed } from 'vue';
 import { nextTurn } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
@@ -76,8 +76,14 @@ function cellColor (R, C) {
     }
 }
 
+const isAttackAbled = ref(true);
+
 // isAttackLand can have further checks
 function isAttackLand (R, C) {
+    if (!isAttackAbled.value) {
+        return;
+    }
+    isAttackAbled.value = !isAttackAbled.value;
     const checkCell = gridArray.value[R][C];
     checkCell.isHit = true;
     if (checkCell.placement === STATES.PLACED && isDestroyed(checkCell.ID)) {
@@ -91,6 +97,7 @@ function isAttackLand (R, C) {
     setTimeout(() => {
         nextTurn();
         store.p1Active = !store.p1Active;
+        isAttackAbled.value = !isAttackAbled.value;
     }, 1000);
 }
 // isDestroyed seems to be fine. Check if problem
