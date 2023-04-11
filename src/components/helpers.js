@@ -22,6 +22,10 @@ export function manualPlace (R, C) {
         alert('no ship is selected');
         return;
     }
+    if (activePlayer.grid[R][C].placement !== STATES.BLANK) {
+        alert('invalid placement');
+        return;
+    }
     const len = activePlayer.ships[ID - 1].len;
     if ((goRight && placeRightSuccess(R, C, len)) || (!goRight && placeDownSuccess(R, C, len))) {
         doPlacement(R, C, len, goRight, ID);
