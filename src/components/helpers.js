@@ -198,3 +198,9 @@ function colorMargin (R, C) {
     activePlayer.grid[R][C].display = STATES.MARGIN;
     activePlayer.grid[R][C].placement = STATES.MARGIN;
 }
+
+export function newGame () {
+    store.p1.placementConfirmed = false;
+    store.p2.placementConfirmed = false;
+    store.initGame();
+}

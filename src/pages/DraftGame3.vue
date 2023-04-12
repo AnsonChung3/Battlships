@@ -15,7 +15,12 @@
                         <h1>Game End!</h1>
                     </q-card-section>
                     <q-card-actions align="center">
-                        <q-btn label="start new" v-close-popup outline/>
+                        <q-btn
+                            label="start new"
+                            @click="newGame"
+                            v-close-popup
+                            outline
+                        />
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -57,7 +62,7 @@ import { toRef, computed } from 'vue';
 import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
-import { nextTurn } from 'components/helpers.js';
+import { nextTurn, newGame } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
