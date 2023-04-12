@@ -14,6 +14,7 @@
                 <q-tab-panel name="auto">
                     <div class="bg-info text-secondary">
                         <p>Press button to auto place all ships.</p>
+                        <p>1 x 5-tile ship, 1 x 4-tile ship, 2 x 3-tile ship, 2 x 2-tile ship, 2 x 1-tile ship</p>
                         <custom-q-btn
                             @click="autoPlace"
                             label="Auto Place"
