@@ -25,6 +25,9 @@
                 </q-card>
             </q-dialog>
         </div>
+        <div>
+            <h1>Battleships</h1>
+        </div>
         <div v-show="store.turnInterval">
             <h1>{{ turnPlayer }} ready?</h1>
             <q-btn
