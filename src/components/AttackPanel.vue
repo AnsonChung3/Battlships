@@ -26,6 +26,10 @@
                 </div>
             </div>
         </div>
+        <q-btn
+            label="sink all ships"
+            @click="testSinkAll"
+        />
     </div>
 </template>
 
@@ -103,5 +107,11 @@ function isAttackLand (R, C) {
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
     return (cells.every(cell => cell.isHit));
+}
+
+function testSinkAll () {
+    shipsArray.value.forEach(ship => { ship.isSunk = true });
+    const cell = gridArray.value.flat().find(cell => cell.ID === 8);
+    isAttackLand(cell.coordinate.R, cell.coordinate.C);
 }
 </script>
