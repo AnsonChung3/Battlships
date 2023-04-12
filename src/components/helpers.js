@@ -39,6 +39,7 @@ export function manualPlace (R, C) {
 // auto placement mode
 export function autoPlace () {
     // active player needs to be refreshed at the beginning of the placement
+    console.log('<--------------start new auto place-------------->');
     activePlayer = store.p1Active ? store.p1 : store.p2;
     activePlayer.ships.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);
@@ -50,12 +51,13 @@ function shipPlacement (shipLength, ID) {
     const startCell = getRndStart(shipLength);
     const R = startCell.R;
     const C = startCell.C;
+    console.log(`ship placement R: ${R}, C: ${C}`);
     if (shipLength === 1) {
         doPlacement(R, C, shipLength, true, ID);
         return;
     }
-    const right = placeRightSuccess(R, C, shipLength);
-    const down = placeDownSuccess(R, C, shipLength);
+    const right = startCell.right;
+    const down = startCell.down;
     const goRight = !right ? false : (right && down) ? directionRight() : true;
     // let goRight = true;
     // if (!right) {
@@ -66,19 +68,22 @@ function shipPlacement (shipLength, ID) {
     doPlacement(R, C, shipLength, goRight, ID);
 }
 function getRndStart (shipLength) {
-    const maxStartArea = WIDTH - shipLength;
     let R = getRandom(WIDTH);
     let C = getRandom(WIDTH);
     let rndCell = activePlayer.grid[R][C];
+    let right = placeRightSuccess(R, C, shipLength);
+    let down = placeDownSuccess(R, C, shipLength);
 
-    // while (cell is unavailable OR can be placed in neither direction) is true
+    // while (cell is unavailable OR can't be placed in either direction) is true
     // {get a new random start}
-    while (rndCell.placement !== STATES.BLANK || (R > maxStartArea && C > maxStartArea)) {
+    while (rndCell.placement !== STATES.BLANK || (!right && !down)) {
         R = getRandom(WIDTH);
         C = getRandom(WIDTH);
         rndCell = activePlayer.grid[R][C];
+        right = placeRightSuccess(R, C, shipLength);
+        down = placeDownSuccess(R, C, shipLength);
     }
-    return { R, C };
+    return { R, C, right, down };
 }
 function getRandom (max) {
     return Math.floor(Math.random() * max);
@@ -161,26 +166,32 @@ function doPlacement (R, C, shipLength, goRight, ID) {
     }
 }
 function placeRightSuccess (R, C, shipLength) {
+    console.log('place R');
     for (let len = 1; len < shipLength; len++) {
         const col = C + len;
         if (col >= WIDTH) {
+            console.log('not enough room');
             return false;
         }
         const cell = activePlayer.grid[R][col];
         if (cell.placement !== STATES.BLANK) {
+            console.log(`${R}, ${col} is not valid cell`);
             return false;
         }
     }
     return true;
 }
 function placeDownSuccess (R, C, shipLength) {
+    console.log('place D');
     for (let len = 1; len < shipLength; len++) {
         const row = R + len;
         if (row >= WIDTH) {
+            console.log('not enough room');
             return false;
         }
         const cell = activePlayer.grid[row][C];
         if (cell.placement !== STATES.BLANK) {
+            console.log(`${row}, ${C} is not valid cell`);
             return false;
         }
     }
