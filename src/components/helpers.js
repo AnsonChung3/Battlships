@@ -39,7 +39,6 @@ export function manualPlace (R, C) {
 // auto placement mode
 export function autoPlace () {
     // active player needs to be refreshed at the beginning of the placement
-    console.log('<--------------start new auto place-------------->');
     activePlayer = store.p1Active ? store.p1 : store.p2;
     activePlayer.ships.forEach((ship) => {
         shipPlacement(ship.len, ship.ID);
@@ -51,7 +50,6 @@ function shipPlacement (shipLength, ID) {
     const startCell = getRndStart(shipLength);
     const R = startCell.R;
     const C = startCell.C;
-    console.log(`ship placement R: ${R}, C: ${C}`);
     if (shipLength === 1) {
         doPlacement(R, C, shipLength, true, ID);
         return;
@@ -166,32 +164,26 @@ function doPlacement (R, C, shipLength, goRight, ID) {
     }
 }
 function placeRightSuccess (R, C, shipLength) {
-    console.log('place R');
     for (let len = 1; len < shipLength; len++) {
         const col = C + len;
         if (col >= WIDTH) {
-            console.log('not enough room');
             return false;
         }
         const cell = activePlayer.grid[R][col];
         if (cell.placement !== STATES.BLANK) {
-            console.log(`${R}, ${col} is not valid cell`);
             return false;
         }
     }
     return true;
 }
 function placeDownSuccess (R, C, shipLength) {
-    console.log('place D');
     for (let len = 1; len < shipLength; len++) {
         const row = R + len;
         if (row >= WIDTH) {
-            console.log('not enough room');
             return false;
         }
         const cell = activePlayer.grid[row][C];
         if (cell.placement !== STATES.BLANK) {
-            console.log(`${row}, ${C} is not valid cell`);
             return false;
         }
     }

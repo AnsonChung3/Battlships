@@ -88,10 +88,8 @@ function isAttackLand (R, C) {
     checkCell.isHit = true;
     if (checkCell.placement === STATES.PLACED && isDestroyed(checkCell.ID)) {
         shipsArray.value[checkCell.ID - 1].isSunk = true;
-        console.log(`ship ID ${checkCell.ID} is destroyed`);
         const isEnd = shipsArray.value.every(ship => ship.isSunk);
         if (isEnd) {
-            console.log(`game end`);
             store.gameEnd = !store.gameEnd;
         }
     }
