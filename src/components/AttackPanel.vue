@@ -95,6 +95,7 @@ function isAttackLand (R, C) {
         const isEnd = shipsArray.value.every(ship => ship.isSunk);
         if (isEnd) {
             store.gameEnd = !store.gameEnd;
+            return;
         }
     }
     setTimeout(() => {
