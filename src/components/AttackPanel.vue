@@ -91,7 +91,8 @@ function isAttackLand (R, C) {
         console.log(`ship ID ${checkCell.ID} is destroyed`);
         const isEnd = shipsArray.value.every(ship => ship.isSunk);
         if (isEnd) {
-            console.log(`emit end from ${props.player}`);
+            console.log(`game end`);
+            store.gameEnd = !store.gameEnd;
         }
     }
     setTimeout(() => {
