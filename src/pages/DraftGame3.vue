@@ -1,10 +1,10 @@
 <template>
     <div>
-        <q-btn
+        <custom-q-btn
             label="toggle p1 active"
             @click="store.p1Active=!store.p1Active"
         />
-        <q-btn
+        <custom-q-btn
             label="toggle game end"
             @click="store.gameEnd=!store.gameEnd"
         />
@@ -30,7 +30,7 @@
         </div>
         <div v-show="store.turnInterval">
             <h1>{{ turnPlayer }} ready?</h1>
-            <q-btn
+            <custom-q-btn
                 label="next turn"
                 @click="nextTurn"
             />
@@ -66,6 +66,7 @@ import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
 import { nextTurn, newGame } from 'components/helpers.js';
+import CustomQBtn from 'components/CustomQBtn.vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
