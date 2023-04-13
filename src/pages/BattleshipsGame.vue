@@ -1,13 +1,5 @@
 <template>
     <div>
-        <custom-q-btn
-            label="toggle p1 active"
-            @click="store.p1Active=!store.p1Active"
-        />
-        <custom-q-btn
-            label="toggle game end"
-            @click="store.gameEnd=!store.gameEnd"
-        />
         <div class="GameEndModal">
             <q-dialog v-model="store.gameEnd" persistent>
                 <q-card class="bg-info text-secondary">

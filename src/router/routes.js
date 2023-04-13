@@ -1,10 +1,10 @@
 
 const routes = [
     {
-        path: '/',
+        path: '/BattleshipsGame',
         component: () => import('layouts/CustomLayout.vue'),
         children: [
-            { path: 'DraftGame3', component: () => import('pages/DraftGame3.vue') }
+            { path: '', component: () => import('pages/BattleshipsGame.vue') }
         ]
     },
 
