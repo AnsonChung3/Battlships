@@ -36,13 +36,13 @@
             />
         </div>
         <div v-show="!store.turnInterval">
-            <div v-if="!p1.placementConfirmed" class="row">
+            <div v-if="!store.p1.placementConfirmed" class="row">
                 <!-- question: does placement panel need to be here for consistency? -->
                 <placement-header class="col" />
                 <!-- note: h2 here needs to change to computed msg -->
                 <div class="col"> <h2>Player 1 please choose fleet placement</h2> </div>
             </div>
-            <div v-else-if="!p2.placementConfirmed" class="row">
+            <div v-else-if="!store.p2.placementConfirmed" class="row">
                 <div class="col"> <h2>Player 2 please choose fleet placement</h2> </div>
                 <placement-header class="col" />
             </div>
@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { toRef, computed } from 'vue';
+import { computed } from 'vue';
 import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
@@ -72,12 +72,8 @@ import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
 store.initGame();
 
-// question: I thought I should use toRefs, but appearant that give me error?
-const p1 = toRef(store, 'p1');
-const p2 = toRef(store, 'p2');
 const isPlayerOne = true;
 const turnPlayer = computed(() => store.p1Active ? 'Player 1' : 'Player 2');
-
 </script>
 
 <style>
