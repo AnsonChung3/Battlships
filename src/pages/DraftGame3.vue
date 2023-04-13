@@ -38,23 +38,21 @@
         </div>
         <div v-show="!store.turnInterval">
             <div v-if="!store.p1.placementConfirmed" class="row">
-                <!-- question: does placement panel need to be here for consistency? -->
-                <placement-header class="col" />
-                <!-- note: h2 here needs to change to computed msg -->
-                <div class="col"> <h2>Player 1 please choose fleet placement</h2> </div>
+                <placement-header class="panels col" />
+                <div class="panels col"> <h2>Player 1 please choose fleet placement</h2> </div>
             </div>
             <div v-else-if="!store.p2.placementConfirmed" class="row">
-                <div class="col"> <h2>Player 2 please choose fleet placement</h2> </div>
-                <placement-header class="col" />
+                <div class="panels col"> <h2>Player 2 please choose fleet placement</h2> </div>
+                <placement-header class="panels col" />
             </div>
             <div v-else>
                 <h2>{{ turnPlayer }}'s turn</h2>
                 <div class="row">
-                    <div class="col">
+                    <div class="panels col">
                         <attack-header :p1=isPlayerOne />
                         <attack-panel :p1=isPlayerOne />
                     </div>
-                    <div class="col">
+                    <div class="panels col">
                         <attack-header :p1=!isPlayerOne />
                         <attack-panel :p1=!isPlayerOne />
                     </div>
@@ -93,5 +91,8 @@ const turnPlayer = computed(() => store.p1Active ? 'Player 1' : 'Player 2');
     height: 40px;
     border: 1px solid #D4D4D4;
     margin: -10% -10% -10% 0%
+}
+.panels {
+    padding: 0% 1% 0% 1%
 }
 </style>
