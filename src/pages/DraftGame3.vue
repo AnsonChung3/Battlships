@@ -46,14 +46,17 @@
                 <div class="col"> <h2>Player 2 please choose fleet placement</h2> </div>
                 <placement-header class="col" />
             </div>
-            <div v-else class="row">
-                <div class="col">
-                    <attack-header :p1=isPlayerOne />
-                    <attack-panel :p1=isPlayerOne />
-                </div>
-                <div class="col">
-                    <attack-header :p1=!isPlayerOne />
-                    <attack-panel :p1=!isPlayerOne />
+            <div v-else>
+                <h2>{{ turnPlayer }}'s turn</h2>
+                <div class="row">
+                    <div class="col">
+                        <attack-header :p1=isPlayerOne />
+                        <attack-panel :p1=isPlayerOne />
+                    </div>
+                    <div class="col">
+                        <attack-header :p1=!isPlayerOne />
+                        <attack-panel :p1=!isPlayerOne />
+                    </div>
                 </div>
             </div>
         </div>
