@@ -22,14 +22,14 @@ import ProgressQBtn from 'src/components/ProgressQBtn.vue';
 const props = defineProps({
     p1: Boolean
 });
-const p1 = toRef(props, 'p1');
+const propP1 = toRef(props, 'p1');
 
 import { useBattleshipStore } from 'stores/battleship.js';
 const store = useBattleshipStore();
-const player = (p1.value === true) ? toRefs(store.p1) : toRefs(store.p2);
+const player = (propP1.value === true) ? toRefs(store.p1) : toRefs(store.p2);
 const shipsArray = player.ships;
 
 const p1Active = toRef(store, 'p1Active');
-const headerText = computed(() => { return (p1.value === p1Active.value) ? 'Your Remaining Fleet' : 'Enemy Destroying Progress'; });
+const headerText = computed(() => { return (propP1.value === p1Active.value) ? 'Your Remaining Fleet' : 'Enemy Destroying Progress'; });
 
 </script>
