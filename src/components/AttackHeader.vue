@@ -8,6 +8,7 @@
                     <progress-q-btn
                         :label=ship.ID
                         :shipState=ship.isSunk
+                        :shipLength=ship.len
                     />
                 </div>
                 <div
