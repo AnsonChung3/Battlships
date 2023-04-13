@@ -7,6 +7,8 @@ let activePlayer = store.p1Active ? store.p1 : store.p2;
 // game play
 export function nextTurn () {
     store.turnInterval = !store.turnInterval;
+    store.p1Active = !store.p1Active;
+    store.isAttackAbled = !store.isAttackAbled;
 };
 
 // manual placement mode

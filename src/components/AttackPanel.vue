@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, toRef, toRefs, computed } from 'vue';
+import { toRef, toRefs, computed } from 'vue';
 import { nextTurn } from 'components/helpers.js';
 
 import { useBattleshipStore } from 'stores/battleship.js';
@@ -80,7 +80,7 @@ function cellColor (R, C) {
     }
 }
 
-const isAttackAbled = ref(true);
+const isAttackAbled = toRef(store, 'isAttackAbled');
 
 // isAttackLand can have further checks
 function isAttackLand (R, C) {
@@ -98,11 +98,6 @@ function isAttackLand (R, C) {
             return;
         }
     }
-    setTimeout(() => {
-        nextTurn();
-        store.p1Active = !store.p1Active;
-        isAttackAbled.value = !isAttackAbled.value;
-    }, 1000);
 }
 // isDestroyed seems to be fine. Check if problem
 function isDestroyed (ID) {

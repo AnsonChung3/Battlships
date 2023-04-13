@@ -77,6 +77,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
 
     const gameEnd = ref(false);
     const turnInterval = ref(false);
+    const isAttackAbled = ref(true);
 
     return {
         p1Active,
@@ -89,6 +90,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
         manualSelectID,
         manualGoRight,
         gameEnd,
-        turnInterval
+        turnInterval,
+        isAttackAbled
     };
 });
