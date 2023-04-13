@@ -9,7 +9,7 @@
             @click="store.gameEnd=!store.gameEnd"
         />
         <div class="GameEndModal">
-            <q-dialog v-model="store.gameEnd" persistent="">
+            <q-dialog v-model="store.gameEnd" persistent>
                 <q-card class="bg-info text-secondary">
                     <q-card-section>
                         <h1>Game End!</h1>
@@ -32,7 +32,7 @@
             <h1>{{ turnPlayer }} ready?</h1>
             <custom-q-btn
                 label="next turn"
-                @click="nextTurn"
+                @click="store.turnInterval = !store.turnInterval"
             />
         </div>
         <div v-show="!store.turnInterval">
@@ -65,10 +65,10 @@
 
 <script setup>
 import { computed } from 'vue';
+import { newGame } from 'components/helpers.js';
 import PlacementHeader from 'components/PlacementHeader.vue';
 import AttackHeader from 'components/AttackHeader.vue';
 import AttackPanel from 'components/AttackPanel.vue';
-import { nextTurn, newGame } from 'components/helpers.js';
 import CustomQBtn from 'components/CustomQBtn.vue';
 
 import { useBattleshipStore } from 'stores/battleship.js';
