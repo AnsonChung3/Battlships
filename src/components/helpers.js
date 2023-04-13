@@ -59,12 +59,6 @@ function shipPlacement (shipLength, ID) {
     const right = startCell.right;
     const down = startCell.down;
     const goRight = !right ? false : (right && down) ? directionRight() : true;
-    // let goRight = true;
-    // if (!right) {
-    //     goRight = false;
-    // } else if (right && down) {
-    //     goRight = directionRight();
-    // }
     doPlacement(R, C, shipLength, goRight, ID);
 }
 function getRndStart (shipLength) {

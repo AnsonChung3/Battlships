@@ -28,9 +28,7 @@ export const useBattleshipStore = defineStore('battleship', () => {
             const rowArray = [];
             for (let C = 0; C < gridWidth; C++) {
                 rowArray.push({
-                    // coordinate is only for debugging
-                    // can be removed when whole project is complete
-                    coordinate: `row ${R}, column ${C}`,
+                    coordinate: { R, C },
                     display: STATES.BLANK,
                     placement: STATES.BLANK,
                     ID: 0,

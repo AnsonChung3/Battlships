@@ -22,7 +22,6 @@
                         />
                     </div>
                 </q-tab-panel>
-                <!-- manual mode will be worked on when auto mode is finished modding -->
                 <q-tab-panel name="manual">
                     <div class="bg-info text-secondary">
                         <p>Pick the size of ship you want to place</p>
@@ -34,7 +33,6 @@
                             class="buttonRow"
                         />
                         <p>
-                            <!-- click or press R to rotate -->
                             Click to rotate:
                             <custom-q-btn
                                 @click="rotate"
@@ -79,7 +77,6 @@ const gridArray = player.grid;
 const shipsArray = player.ships;
 
 const tab = ref('auto');
-// watcher seems working fine. Check if problem
 watch(tab, (newtab) => {
     clearPlacement();
 });

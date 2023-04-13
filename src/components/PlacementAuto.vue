@@ -2,7 +2,7 @@
     <div>
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!-- cells are only for display when in auto mode -->
+                <!-- cells are display only when in auto mode -->
                 <div
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"

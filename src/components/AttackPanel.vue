@@ -5,7 +5,6 @@
         for when it's showing as home/opponent panel -->
         <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!-- v-if logic can potentially change to v-show -->
                 <div
                     v-if="homePanel"
                     class="cell"
@@ -26,10 +25,6 @@
                 </div>
             </div>
         </div>
-        <q-btn
-            label="sink all ships"
-            @click="testSinkAll"
-        />
     </div>
 </template>
 
@@ -81,8 +76,6 @@ function cellColor (R, C) {
 }
 
 const isAttackAbled = toRef(store, 'isAttackAbled');
-
-// isAttackLand can have further checks
 function isAttackLand (R, C) {
     const checkCell = gridArray.value[R][C];
     if (!isAttackAbled.value || checkCell.isHit) {
@@ -106,15 +99,8 @@ function isAttackLand (R, C) {
     }
 }
 
-// isDestroyed seems to be fine. Check if problem
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
     return (cells.every(cell => cell.isHit));
-}
-
-function testSinkAll () {
-    shipsArray.value.forEach(ship => { ship.isSunk = true });
-    const cell = gridArray.value.flat().find(cell => cell.ID === 8);
-    isAttackLand(cell.coordinate.R, cell.coordinate.C);
 }
 </script>

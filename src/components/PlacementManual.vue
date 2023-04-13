@@ -2,7 +2,6 @@
     <div>
          <div v-for="(row, R) in gridArray" :key="R">
             <div class="inline" v-for="(cell, C) in row" :key="C">
-                <!-- cells are clickable when in manual mode -->
                 <div
                     @click="manualPlace(R, C)"
                     class="cell"
