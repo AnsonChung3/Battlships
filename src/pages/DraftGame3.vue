@@ -12,7 +12,8 @@
             <q-dialog v-model="store.gameEnd" persistent>
                 <q-card class="bg-info text-secondary">
                     <q-card-section>
-                        <h1>Game End!</h1>
+                        <h1>{{ turnPlayer }} won!</h1>
+                        <h1> Game End!</h1>
                     </q-card-section>
                     <q-card-actions align="center">
                         <q-btn
