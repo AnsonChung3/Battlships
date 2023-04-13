@@ -8,19 +8,20 @@ export const useBattleshipStore = defineStore('battleship', () => {
         // can be removed when whole project is complete
         player: 1,
         placementConfirmed: false,
+        autoTurn: true,
         grid: [],
         ships: []
     });
     const p2 = reactive({
         player: 2,
         placementConfirmed: false,
+        autoTurn: true,
         grid: [],
         ships: []
     });
 
     const gridWidth = 10;
     const shipLengths = [5, 4, 3, 3, 2, 2, 1, 1];
-
     function generateGrid (player) {
         player.grid = [];
         for (let R = 0; R < gridWidth; R++) {

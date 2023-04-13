@@ -98,7 +98,14 @@ function isAttackLand (R, C) {
             return;
         }
     }
+    const opponent = !p1.value ? toRefs(store.p1) : toRefs(store.p2);
+    if (!homePanel.value && opponent.autoTurn.value) {
+        setTimeout(() => {
+            nextTurn();
+        }, 1000);
+    }
 }
+
 // isDestroyed seems to be fine. Check if problem
 function isDestroyed (ID) {
     const cells = gridArray.value.flat().filter(cell => cell.ID === ID);
