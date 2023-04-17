@@ -7,8 +7,6 @@
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
-                    ID: {{ cell.ID }}
-                    P: {{ cell.placement }}
                 </div>
             </div>
         </div>

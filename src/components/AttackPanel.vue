@@ -10,8 +10,6 @@
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
-                    ID: {{ cell.ID }}
-                    P: {{ cell.placement }}
                 </div>
                 <!-- cells are only clickable when it's showing as opponent panel -->
                 <div
@@ -20,8 +18,6 @@
                     class="cell"
                     :style="{background: '#'+cellColor(R, C)}"
                 >
-                    ID: {{ cell.ID }}
-                    P: {{ cell.placement }}
                 </div>
             </div>
         </div>
