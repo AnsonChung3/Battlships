@@ -91,7 +91,7 @@ function isAttackLand (R, C) {
     if (!homePanel.value && opponent.autoTurn.value) {
         setTimeout(() => {
             nextTurn();
-        }, 1000);
+        }, 1500);
     }
 }
 
